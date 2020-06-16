@@ -1,5 +1,50 @@
 import { Exam, Solution, Question } from "../types/exam";
 
+const normalInitialState = {
+  exams: {
+    byId: {
+      exam1: {
+        id: "exam1",
+        name: "Platform Economy",
+        questionsById: ["question_01", "question_02"],
+      },
+    },
+    allIds: ["exam1"],
+  },
+  questions: {
+    byId: {
+      question_01: {
+        id: "question_01",
+        questionTitle: "",
+        questionText: "What does the fox say?",
+        answerType: "freeText",
+        answerText: "",
+        timeLimit: 120,
+        timeUsed: null,
+        timeStart: null,
+        timeEnd: null,
+        timeExpired: false,
+      },
+      question_02: {
+        id: "question_02",
+        questionTitle: "",
+        questionText: "What does the bird say?",
+        answerType: "freeText",
+        answerText: "",
+        timeLimit: 120,
+        timeUsed: null,
+        timeStart: null,
+        timeEnd: null,
+        timeExpired: false,
+      },
+    },
+  },
+  appState: {
+    currentQuestion: 0,
+  }
+};
+
+
 export const question_01: Question = {
   id: 1,
   title: "",
@@ -10,9 +55,9 @@ export const question_01: Question = {
   },
   time: {
     limit: 120,
-    used: undefined,
-    start: undefined,
-    end: undefined,
+    used: null,
+    start: null,
+    end: null,
     expired: false,
   },
 };
@@ -40,9 +85,9 @@ export const question_02: Question = {
   },
   time: {
     limit: 120,
-    start: undefined,
-    used: undefined,
-    end: undefined,
+    start: null,
+    used: null,
+    end: null,
     expired: false,
   },
 };

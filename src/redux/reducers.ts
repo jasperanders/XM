@@ -7,8 +7,9 @@ import {
   NEXT_QUESTION,
 } from "./actions";
 import { initialState } from "./initialState";
+import { Question } from "../types/exam";
 
-function answer(state: string = "", { type, payload }) {
+function answer(state: Array<Question>, { type, payload }) {
   switch (type) {
     case ANSWER_QUESTION:
       return state;
@@ -50,8 +51,8 @@ function current(state = 0, { type, payload }) {
 
 function exam(state = initialState, { type, payload }) {
   switch (type) {
-    case "SET_ANSWER":
-      break;
+    case ANSWER_QUESTION:
+      return { ...state, questions: answer(state.questions, payload) };
 
     default:
       return state;
