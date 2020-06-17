@@ -1,6 +1,6 @@
 import { Exam, Solution, Question } from "../types/exam";
 
-const normalInitialState = {
+export const initialState = {
   exams: {
     byId: {
       exam1: {
@@ -38,12 +38,12 @@ const normalInitialState = {
         timeExpired: false,
       },
     },
+    allIds: ["question_01", "question_02"],
   },
   appState: {
     currentQuestion: 0,
-  }
+  },
 };
-
 
 export const question_01: Question = {
   id: 1,
@@ -112,7 +112,7 @@ export const examDummy_02 = {
   currentQuestion: 0,
 };
 
-export const initialState: Exam = {
+export const oldInitialState: Exam = {
   id: 1,
   name: "Platform Ökonomie",
   questions: [question_01, question_01],
