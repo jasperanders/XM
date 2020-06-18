@@ -1,4 +1,5 @@
 import { combineReducers } from "@reduxjs/toolkit";
+import produce from "immer";
 import {
   ANSWER_QUESTION,
   START_TIMER,
@@ -6,38 +7,30 @@ import {
   PREVIOUS_QUESTION,
   NEXT_QUESTION,
 } from "./actions";
-import { initialState } from "./initialState";
-import { Question } from "../types/exam";
+import { initialAppState, initialExam, initialQuestions } from "./initialState";
 
-function answer(state: Array<Question>, { type, payload }) {
+function questions(state = initialQuestions, { type, payload }) {
   switch (type) {
     case ANSWER_QUESTION:
-      return state;
+      const { answerText } = payload;
+      const nextState = produce(state, (draftState) => {
+        draftState.byId["question_01"].answerText = answerText;
+      });
+      return nextState;
 
     default:
       return state;
   }
 }
 
-function time(state: number = 0, { type, payload }) {
+function exams(state = initialExam, { type, payload }) {
   switch (type) {
-    case START_TIMER:
-      return state;
-
-    case END_TIMER:
-      return state;
-
     default:
       return state;
   }
 }
 
-const questions = combineReducers({
-  answer,
-  time,
-});
-
-function current(state = 0, { type, payload }) {
+function appState(state = initialAppState, { type, payload }) {
   switch (type) {
     case PREVIOUS_QUESTION:
       return state;
@@ -49,18 +42,10 @@ function current(state = 0, { type, payload }) {
   }
 }
 
-function exam(state = initialState, { type, payload }) {
-  switch (type) {
-    case ANSWER_QUESTION:
-      return { ...state, questions: answer(state.questions, payload) };
-
-    default:
-      return state;
-  }
-}
-
 export const rootReducer = combineReducers({
-  exam,
+  exams,
+  questions,
+  appState,
 });
 
 export default rootReducer;

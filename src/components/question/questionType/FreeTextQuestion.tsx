@@ -9,7 +9,7 @@ export default function FreeTextQuestion({
 }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <textarea  name="answer" defaultValue="test" ref={register} />
+      <textarea  name="answerText" defaultValue="test" ref={register} />
       <input type="submit" />
     </form>
   );

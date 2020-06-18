@@ -1,15 +1,17 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import Question from "./components/question/Question";
-import { question_01, examDummy_02 } from "./types/exam";
 import { setLocalStorage } from "./helper/localStorage";
 
 function App() {
+  const questions = useSelector((state: any) => state.questions);
+  const currentQuestion = useSelector(
+    (state: any) => state.appState.currentQuestion
+  );
+
   return (
     <div className="App">
-      <Question question={question_01} />
-      <button onClick={() => setLocalStorage("exam", examDummy_02)}>
-        Click
-      </button>
+      <Question question={questions.byId[currentQuestion]} />;
     </div>
   );
 }
