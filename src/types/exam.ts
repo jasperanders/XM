@@ -26,13 +26,27 @@ export interface TSolution {
 }
 
 export interface TExam {
-  id: number;
+  id: string;
   name: string;
-  questions: Array<String>;
-  currentQuestion: number;
+  questionsById: Array<string>;
 }
 
-export interface TAnswerPayload {
-  questionId: string;
-  answerText: string;
+export interface TExamState {
+  byId: { [id: string]: TExam };
+  allIds: Array<string>;
+  currentExam: {
+    id: string;
+    currentQuestionIndex: number;
+  };
+}
+
+export interface TAppState {
+  currentTime: number;
+  timerIsActive: boolean;
+}
+
+export interface TRootState {
+  exams: TExamState;
+  questions: TQuestionState;
+  appState: TAppState;
 }

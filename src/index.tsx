@@ -4,8 +4,13 @@ import "./index.css";
 import App from "./App";
 import { Provider } from "react-redux";
 import configureAppStore from "./redux/store";
+import { saveState } from "./redux/localStorage";
 
-const store = configureAppStore();
+export const store = configureAppStore();
+
+store.subscribe(() => {
+  saveState(store.getState());
+});
 
 ReactDOM.render(
   <React.StrictMode>

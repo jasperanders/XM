@@ -1,12 +1,14 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import counterReducer from "../features/counter/counterSlice";
-import { stat } from "fs";
 import { rootReducer } from "./reducers";
+import { loadState } from "./localStorage";
 
 export default function configureAppStore() {
+  const hydrateState = loadState();
+  console.log(hydrateState);
   const store = configureStore({
     reducer: rootReducer,
     middleware: [...getDefaultMiddleware()],
+    // preloadedState: hydrateState,
   });
 
   return store;

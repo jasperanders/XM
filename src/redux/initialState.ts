@@ -1,14 +1,18 @@
-import { TQuestion, TQuestionState } from "../types/exam";
+import { TQuestion, TQuestionState, TExamState } from "../types/exam";
 
-export const initialExam = {
+export const initialExam: TExamState = {
   byId: {
-    exam1: {
-      id: "exam1",
+    exam_01: {
+      id: "exam_01",
       name: "Platform Economy",
       questionsById: ["question_01", "question_02"],
     },
   },
-  allIds: ["exam1"],
+  allIds: ["exam_01"],
+  currentExam: {
+    id: "exam_01",
+    currentQuestionIndex: 0,
+  },
 };
 
 export const initialQuestions: TQuestionState = {
@@ -18,8 +22,8 @@ export const initialQuestions: TQuestionState = {
       questionTitle: "",
       questionText: "What does the fox say?",
       answerType: "freeText",
-      answerText: "",
-      timeLimit: 120,
+      answerText: "quest01",
+      timeLimit: 5,
       timeUsed: null,
       timeStart: null,
       timeEnd: null,
@@ -28,10 +32,10 @@ export const initialQuestions: TQuestionState = {
     question_02: {
       questionId: "question_02",
       questionTitle: "",
-      questionText: "What does the bird say?",
+      questionText: "How many Roads must a man walk down?",
       answerType: "freeText",
-      answerText: "",
-      timeLimit: 120,
+      answerText: "quest02",
+      timeLimit: 5,
       timeUsed: null,
       timeStart: null,
       timeEnd: null,
@@ -42,5 +46,6 @@ export const initialQuestions: TQuestionState = {
 };
 
 export const initialAppState = {
-  currentQuestion: "question_01",
+  currentTime: null,
+  timerIsActive: true,
 };

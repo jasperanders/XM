@@ -6,10 +6,23 @@ export default function FreeTextQuestion({
   watch,
   errors,
   onSubmit,
+  storedAnswer,
 }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <textarea  name="answerText" defaultValue="test" ref={register} />
+      <textarea
+        onPaste={(e) => {
+          e.preventDefault();
+          return false;
+        }}
+        onCopy={(e) => {
+          e.preventDefault();
+          return false;
+        }}
+        name="answerText"
+        defaultValue={storedAnswer}
+        ref={register}
+      />
       <input type="submit" />
     </form>
   );

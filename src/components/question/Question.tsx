@@ -1,23 +1,51 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import FreeTextQuestion from "./questionType/FreeTextQuestion";
-import { TQuestion } from "../../types/exam";
-import { answerQuestion } from "../../redux/actions";
+import { TQuestion, TRootState } from "../../types/exam";
+import {
+  answerFreeTextQuestion,
+  setQuestionStartTime,
+  setQuestionEndTime,
+  nextQuestion,
+} from "../../redux/actions";
+import Timer from "../timer/Timer";
 
 export default function Question({ question }: TProps) {
   const dispatch = useDispatch();
-  const { register, handleSubmit, watch, errors } = useForm();
+  const { currentExam, byId } = useSelector((state: TRootState) => state.exams);
+  const { register, handleSubmit, watch, errors, reset } = useForm();
 
-  const { questionId } = question;
+  const {
+    questionId,
+    answerType,
+    questionText,
+    questionTitle,
+    answerText,
+  } = question;
+  console.log(answerText);
+  useEffect(() => {
+    dispatch(setQuestionStartTime({ questionId }));
+    reset();
+  }, []);
 
   const onSubmit = (data) => {
-    const { answerText } = data;
-    console.log(data);
-    dispatch(answerQuestion({ questionId, answerText: answerText }));
-  };
+    let action = undefined;
+    switch (answerType) {
+      case "freeText":
+        const { answerText } = data;
+        const payload = { questionId, answerText };
+        action = answerFreeTextQuestion(payload);
+        break;
 
-  const { answerType, questionText, questionTitle } = question;
+      default:
+        break;
+    }
+
+    dispatch(action);
+    dispatch(setQuestionEndTime({ questionId }));
+    dispatch(nextQuestion());
+  };
 
   const questionBody = () => {
     switch (answerType) {
@@ -29,6 +57,7 @@ export default function Question({ question }: TProps) {
             watch={watch}
             errors={errors}
             onSubmit={onSubmit}
+            storedAnswer={answerText}
           />
         );
       default:
@@ -38,6 +67,7 @@ export default function Question({ question }: TProps) {
 
   return (
     <div>
+      <Timer questionId={questionId}></Timer>
       <div>{questionTitle}</div>
       <div>{questionText}</div>
       {questionBody()}
