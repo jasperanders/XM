@@ -1,40 +1,30 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { TRootState } from "../../types/exam";
-import { setAppTimer, countDownAppTimer } from "../../redux/actions";
+import React, { useEffect, useState } from "react";
+import { TQuestion } from "../../types/exam";
 import { store } from "../../index";
 
-export default function Timer({ questionId }) {
-  const dispatch = useDispatch();
-  const timeLimit = useSelector(
-    (state: TRootState) => state.questions.byId[questionId].timeLimit
-  );
-  const { timerIsActive, currentTime } = useSelector(
-    (state: TRootState) => state.appState
-  );
+export default function Timer({ question }: TProps) {
+  const { timeStart, timeLimit, questionId } = question;
+  const now = Date.now();
 
-  const dispatchSetAppTimer = (payload) => dispatch(setAppTimer(payload));
-  const dispatchCountDownAppTimer = (payload) =>
-    dispatch(countDownAppTimer(payload));
+  const [timeLeft, setTimeLeft] = useState(
+    timeStart ? Math.trunc(timeLimit - (now - timeStart) / 1000) : timeLimit
+  );
 
   useEffect(() => {
-    let interval = null;
-    if (timerIsActive) {
-      if (currentTime === null) {
-        dispatchSetAppTimer({ timeLimit });
-      }
-      interval = setInterval(() => {
-        dispatchCountDownAppTimer({ countDownBy: 1 });
-        if (store.getState().appState.currentTime <= 0) {
-          clearInterval(interval);
-          console.log("Next Question");
-        }
-      }, 1000);
-    }
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const timeStart = store.getState().questions.byId[questionId].timeStart;
+      setTimeLeft(Math.trunc(timeLimit - (now - timeStart) / 1000));
+    }, 1000);
+
     return () => {
       clearInterval(interval);
     };
-  }, [questionId]);
+  }, [question.questionId]);
 
-  return <div>Time remaining: {currentTime}</div>;
+  return <div>Time remaining: {timeLeft}</div>;
+}
+
+interface TProps {
+  question: TQuestion;
 }

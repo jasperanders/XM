@@ -10,6 +10,7 @@ import {
   nextQuestion,
 } from "../../redux/actions";
 import Timer from "../timer/Timer";
+import { freeTextFromName } from "../../constants/formConstants";
 
 export default function Question({ question }: TProps) {
   const dispatch = useDispatch();
@@ -27,18 +28,18 @@ export default function Question({ question }: TProps) {
   useEffect(() => {
     dispatch(setQuestionStartTime({ questionId }));
     reset();
-  }, []);
+  }, [questionId]);
 
   const onSubmit = (data) => {
     let action = undefined;
     switch (answerType) {
       case "freeText":
-        const { answerText } = data;
-        const payload = { questionId, answerText };
+        const answer = data[freeTextFromName];
+        const payload = { questionId, answer };
         action = answerFreeTextQuestion(payload);
         break;
 
-      default:
+      default:  
         break;
     }
 
@@ -67,7 +68,7 @@ export default function Question({ question }: TProps) {
 
   return (
     <div>
-      <Timer questionId={questionId}></Timer>
+      <Timer question={question}></Timer>
       <div>{questionTitle}</div>
       <div>{questionText}</div>
       {questionBody()}

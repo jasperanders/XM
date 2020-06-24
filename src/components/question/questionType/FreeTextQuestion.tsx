@@ -1,4 +1,5 @@
 import React from "react";
+import { freeTextFromName } from "../../../constants/formConstants";
 
 export default function FreeTextQuestion({
   register,
@@ -19,7 +20,7 @@ export default function FreeTextQuestion({
           e.preventDefault();
           return false;
         }}
-        name="answerText"
+        name={freeTextFromName}
         defaultValue={storedAnswer}
         ref={register}
       />

@@ -1,6 +1,6 @@
 export interface TAnswerFreeTextPayload {
   questionId: string;
-  answerText: string;
+  answer: string;
 }
 
 export interface TUseTimerPayload {
