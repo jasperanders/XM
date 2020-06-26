@@ -2,6 +2,8 @@ import React from "react";
 import { useSelector } from "react-redux";
 import Question from "./components/question/Question";
 import { TRootState } from "./types/exam";
+import Layout from "./components/layout/Layout";
+import ExamProgress from "./components/basics/progress/ExamProgress";
 
 function App() {
   const questions = useSelector((state: TRootState) => state.questions);
@@ -12,7 +14,10 @@ function App() {
 
   return (
     <div className="App">
-      <Question question={questions.byId[currentQuestion]} />
+      <Layout
+        mainContent={<Question question={questions.byId[currentQuestion]} />}
+        header={<ExamProgress />}
+      />
     </div>
   );
 }

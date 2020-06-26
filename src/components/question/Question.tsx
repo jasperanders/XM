@@ -39,7 +39,7 @@ export default function Question({ question }: TProps) {
         action = answerFreeTextQuestion(payload);
         break;
 
-      default:  
+      default:
         break;
     }
 
@@ -68,10 +68,10 @@ export default function Question({ question }: TProps) {
 
   return (
     <div>
-      <Timer question={question}></Timer>
-      <div>{questionTitle}</div>
-      <div>{questionText}</div>
+      <h2>{questionTitle}</h2>
+      <p>{questionText}</p>
       {questionBody()}
+      <Timer question={question}></Timer>
     </div>
   );
 }
