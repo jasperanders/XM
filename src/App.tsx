@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import Question from "./components/question/Question";
 import { TRootState } from "./types/exam";
 import Layout from "./components/layout/Layout";
-import ExamProgress from "./components/basics/progress/ExamProgress";
+import ExamProgress from "./components/head/ExamProgress";
 
 function App() {
   const questions = useSelector((state: TRootState) => state.questions);

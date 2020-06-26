@@ -8,25 +8,10 @@ export default function FreeTexTFreeTextQuestion({
   watch,
   errors,
   onSubmit,
-  question,
+  storedAnswer,
 }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Textarea
-        rows={10}
-        columns={20}
-        onPaste={(e) => {
-          e.preventDefault();
-          return false;
-        }}
-        onCopy={(e) => {
-          e.preventDefault();
-          return false;
-        }}
-        name={freeTextFromName}
-        defaultValue={question.storedAnswer}
-        ref={register}
-      />
       <Button type="submit">Save and Next Question</Button>
     </form>
   );

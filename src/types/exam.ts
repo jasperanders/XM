@@ -1,4 +1,4 @@
-export interface TQuestion {
+export interface TFreeTextQuestion {
   questionId: string;
   questionTitle: string;
   questionText: string;
@@ -11,8 +11,22 @@ export interface TQuestion {
   timeExpired: boolean;
 }
 
+export interface TMultipleChoiceQuestion {
+  questionId: string;
+  questionTitle: string;
+  questionText: string;
+  answerType: "multipleChoice";
+  possibleAnswers: string;
+  answerSelection: Array<string>;
+  timeLimit: number;
+  timeUsed: number;
+  timeStart: number;
+  timeEnd: number;
+  timeExpired: boolean;
+}
+
 export interface TQuestionState {
-  byId: { [id: string]: TQuestion };
+  byId: { [id: string]: TFreeTextQuestion | TMultipleChoiceQuestion };
   allIds: Array<string>;
 }
 

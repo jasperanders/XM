@@ -2,13 +2,17 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import FreeTextQuestion from "./questionType/FreeTextQuestion";
-import { TQuestion, TRootState } from "../../types/exam";
+import {
+  TFreeTextQuestion,
+  TRootState,
+  TMultipleChoiceQuestion,
+} from "../../types/exam";
 import { Heading } from "theme-ui";
 import {
   answerFreeTextQuestion,
-  setQuestionStartTime,
-  setQuestionEndTime,
-  nextQuestion,
+  seTFreeTextQuestionStartTime,
+  seTFreeTextQuestionEndTime,
+  nexTFreeTextQuestion,
 } from "../../redux/actions";
 import Timer from "../timer/Timer";
 import { freeTextFromName } from "../../constants/formConstants";
@@ -18,16 +22,9 @@ export default function Question({ question }: TProps) {
   const { currentExam, byId } = useSelector((state: TRootState) => state.exams);
   const { register, handleSubmit, watch, errors, reset } = useForm();
 
-  const {
-    questionId,
-    answerType,
-    questionText,
-    questionTitle,
-    answerText,
-  } = question;
-  console.log(answerText);
+  const { questionId, answerType, questionText, questionTitle } = question;
   useEffect(() => {
-    dispatch(setQuestionStartTime({ questionId }));
+    dispatch(seTFreeTextQuestionStartTime({ questionId }));
     reset();
   }, [questionId]);
 
@@ -45,8 +42,8 @@ export default function Question({ question }: TProps) {
     }
 
     dispatch(action);
-    dispatch(setQuestionEndTime({ questionId }));
-    dispatch(nextQuestion());
+    dispatch(seTFreeTextQuestionEndTime({ questionId }));
+    dispatch(nexTFreeTextQuestion());
   };
 
   const questionBody = () => {
@@ -59,7 +56,7 @@ export default function Question({ question }: TProps) {
             watch={watch}
             errors={errors}
             onSubmit={onSubmit}
-            storedAnswer={answerText}
+            question={question}
           />
         );
       default:
@@ -78,5 +75,5 @@ export default function Question({ question }: TProps) {
 }
 
 interface TProps {
-  question: TQuestion;
+  question: TFreeTextQuestion | TMultipleChoiceQuestion;
 }

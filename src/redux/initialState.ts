@@ -1,4 +1,4 @@
-import { TQuestion, TQuestionState, TExamState } from "../types/exam";
+import { TQuestionState, TExamState } from "../types/exam";
 
 export const initialExam: TExamState = {
   byId: {
@@ -19,7 +19,7 @@ export const initialQuestions: TQuestionState = {
   byId: {
     question_01: {
       questionId: "question_01",
-      questionTitle: "",
+      questionTitle: "General Question",
       questionText: "What does the fox say?",
       answerType: "freeText",
       answerText: "quest01",
@@ -33,8 +33,9 @@ export const initialQuestions: TQuestionState = {
       questionId: "question_02",
       questionTitle: "",
       questionText: "How many Roads must a man walk down?",
-      answerType: "freeText",
-      answerText: "quest02",
+      answerType: "multipleChoice",
+      possibleAnswers: "quest02",
+      answerSelection: [],
       timeLimit: 51,
       timeUsed: null,
       timeStart: null,

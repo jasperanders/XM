@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { TQuestion } from "../../types/exam";
+import { TFreeTextQuestion, TMultipleChoiceQuestion } from "../../types/exam";
 import { store } from "../../index";
 import { Heading } from "theme-ui";
 
@@ -23,9 +23,9 @@ export default function Timer({ question }: TProps) {
     };
   }, [question.questionId]);
 
-  return <Heading as={'h3'}>{timeLeft}</Heading>;
+  return <Heading as={"h3"}>{timeLeft}</Heading>;
 }
 
 interface TProps {
-  question: TQuestion;
+  question: TFreeTextQuestion | TMultipleChoiceQuestion;
 }

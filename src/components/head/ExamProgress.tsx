@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, RootStateOrAny } from "react-redux";
-import { Box, Progress, Flex } from "theme-ui";
-import { TRootState } from "../../../types/exam";
+import { Heading, Progress, Flex } from "theme-ui";
+import { TRootState } from "../../types/exam";
 
 export default function ExamProgress() {
   const exams = useSelector((state: TRootState) => state.exams);
@@ -15,9 +15,12 @@ export default function ExamProgress() {
         justifyContent: "center",
         background: "primary",
         margin: "1rem",
-        marginTop: "3rem",
+        flexDirection: "column",
       }}
     >
+      <Heading as="h1" sx={{ marginBottom: "2rem" }}>
+        {exams.byId[exams.currentExam.id].name}
+      </Heading>
       <Progress max={questionsById.length} value={currentQuestionIndex} />
     </Flex>
   );

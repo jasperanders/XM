@@ -8,7 +8,7 @@ export default {
     heading: "inherit",
     monospace: "Menlo, monospace",
   },
-  fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 96],
+  fontSizes: [15, 16, 20, 24, 32, 48, 64, 96],
   fontWeights: {
     body: 400,
     heading: 700,
@@ -24,6 +24,7 @@ export default {
     primary: "#07c",
     secondary: "#30c",
     muted: "#f6f6f6",
+    light: " #E8F4FF",
     inactive: "#95a5a6",
     active: "#e74c3c",
   },
@@ -39,6 +40,7 @@ export default {
       fontFamily: "body",
       lineHeight: "body",
       fontWeight: "body",
+      fontSize: 0,
     },
     h1: {
       variant: "text.heading",
@@ -99,7 +101,8 @@ export default {
     },
     masterContainer: {
       width: ["100%", "100%", "75%"],
-      padding: "3rem",
+      paddingLeft: "3rem",
+      paddingRight: "3rem",
     },
     header: {},
   },
@@ -121,6 +124,12 @@ export default {
   forms: {
     textarea: {
       width: "30vw",
+      minWidth: "100px",
+      minHeight: "100px",
+      ":focus": {
+        border: "1px solid #07c",
+        backgroundColor: "light",
+      },
     },
   },
   buttons: {
