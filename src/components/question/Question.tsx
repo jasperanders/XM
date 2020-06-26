@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import FreeTextQuestion from "./questionType/FreeTextQuestion";
 import { TQuestion, TRootState } from "../../types/exam";
+import { Heading } from "theme-ui";
 import {
   answerFreeTextQuestion,
   setQuestionStartTime,
@@ -68,7 +69,7 @@ export default function Question({ question }: TProps) {
 
   return (
     <div>
-      <h2>{questionTitle}</h2>
+      <Heading as={"h2"}>{questionTitle}</Heading>
       <p>{questionText}</p>
       {questionBody()}
       <Timer question={question}></Timer>

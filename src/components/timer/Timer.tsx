@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { TQuestion } from "../../types/exam";
 import { store } from "../../index";
+import { Heading } from "theme-ui";
 
 export default function Timer({ question }: TProps) {
   const { timeStart, timeLimit, questionId } = question;
@@ -22,7 +23,7 @@ export default function Timer({ question }: TProps) {
     };
   }, [question.questionId]);
 
-  return <div>Time remaining: {timeLeft}</div>;
+  return <Heading as={'h3'}>{timeLeft}</Heading>;
 }
 
 interface TProps {
