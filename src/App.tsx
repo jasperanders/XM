@@ -6,16 +6,15 @@ import Layout from "./components/layout/Layout";
 import ExamProgress from "./components/head/ExamProgress";
 
 function App() {
-  const questions = useSelector((state: TRootState) => state.questions);
-  const { currentExam, byId } = useSelector((state: TRootState) => state.exams);
-
-  const currentQuestion =
-    byId[currentExam.id].questionsById[currentExam.currentQuestionIndex];
+  const questions = useSelector((state: TRootState) => state.questionTable);
+  const { currentQuestionId } = useSelector(
+    (state: TRootState) => state.examState
+  );
 
   return (
     <div className="App">
       <Layout
-        mainContent={<Question question={questions.byId[currentQuestion]} />}
+        mainContent={<Question question={questions.byId[currentQuestionId]} />}
         header={<ExamProgress />}
       />
     </div>

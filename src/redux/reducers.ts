@@ -4,36 +4,44 @@ import {
   ANSWER_FREE_TEXT_QUESTION,
   SET_QUESTION_START_TIME,
   SET_QUESTION_END_TIME,
-  PREVIOUS_QUESTION,
   NEXT_QUESTION,
   SET_APP_TIMER,
   COUNT_DOWN_APP_TIMER,
 } from "./actions";
-import { initialAppState, initialExam, initialQuestions } from "./initialState";
-import { store } from "..";
-import { useDispatch } from "react-redux";
+import {
+  initialAnswerTable,
+  initialExamState,
+  initialExamTable,
+  initialQuestionTable,
+  initialAnswerBodyMultipleChoiceTable,
+  initialQuestionBodyMultipleChoiceTable,
+  initialAnswerBodyFreeTextTable,
+  initialQuestionBodyFreeTextTable,
+} from "./initialState";
 
-function questions(state = initialQuestions, { type, payload }) {
+// ================= Basic Tables =====================
+
+function questionTable(state = initialQuestionTable, { type, payload }) {
   switch (type) {
-    case ANSWER_FREE_TEXT_QUESTION:
-      return produce(state, (draftState) => {
-        let question = draftState.byId[payload.questionId];
-        question.answerText = payload.answerText;
-        question.timeExpired = true;
-      });
+    default:
+      return state;
+  }
+}
 
+function answerTable(state = initialAnswerTable, { type, payload }) {
+  switch (type) {
     case SET_QUESTION_START_TIME:
       return produce(state, (draftState) => {
-        let question = draftState.byId[payload.questionId];
-        if (question.timeStart === null) {
-          question.timeStart = Date.now();
+        const answer = draftState.byId[payload.questionId];
+        if (answer.timeStart === null) {
+          answer.timeStart = Date.now();
         }
       });
     case SET_QUESTION_END_TIME:
       return produce(state, (draftState) => {
-        let question = draftState.byId[payload.questionId];
-        question.timeEnd = Date.now();
-        question.timeUsed = question.timeEnd - question.timeStart;
+        let answer = draftState.byId[payload.questionId];
+        answer.timeEnd = Date.now();
+        answer.timeExpired = true;
       });
 
     default:
@@ -41,23 +49,24 @@ function questions(state = initialQuestions, { type, payload }) {
   }
 }
 
-function exams(state = initialExam, { type, payload }) {
+function examTable(state = initialExamTable, { type, payload }) {
+  switch (type) {
+    default:
+      return state;
+  }
+}
+
+function examState(state = initialExamState, { type, payload }) {
   switch (type) {
     case NEXT_QUESTION:
-      return produce(state, (draft) => {
-        const { id, currentQuestionIndex } = draft.currentExam;
-        const examLength = draft.byId[id].questionsById.length;
-        if (currentQuestionIndex < examLength - 1) {
-          draft.currentExam.currentQuestionIndex += 1;
+      return produce(state, (d) => {
+        const examLength = payload.currentExam.questionsById.length;
+        if (d.currentQuestionIndex < examLength - 1) {
+          d.currentQuestionIndex += 1;
+          d.currentQuestionId =
+            payload.currentExam.questionsById[d.currentQuestionIndex];
         }
       });
-    default:
-      return state;
-  }
-}
-
-function appState(state = initialAppState, { type, payload }) {
-  switch (type) {
     case SET_APP_TIMER:
       return produce(state, (draftState) => {
         draftState.currentTime = payload.timeLimit;
@@ -78,10 +87,65 @@ function appState(state = initialAppState, { type, payload }) {
   }
 }
 
+// ================= Body Tables =====================
+
+function questionBodyMultipleChoiceTable(
+  state = initialQuestionBodyMultipleChoiceTable,
+  { type, payload }
+) {
+  switch (type) {
+    default:
+      return state;
+  }
+}
+
+function questionBodyFreeTextTable(
+  state = initialQuestionBodyFreeTextTable,
+  { type, payload }
+) {
+  switch (type) {
+    default:
+      return state;
+  }
+}
+
+function answerBodyFreeTextTable(
+  state = initialAnswerBodyFreeTextTable,
+  { type, payload }
+) {
+  switch (type) {
+    case ANSWER_FREE_TEXT_QUESTION:
+      return produce(state, (draftState) => {
+        let question = draftState.byId[payload.questionId];
+        question.answerText = payload.answerText;
+      });
+
+    default:
+      return state;
+  }
+}
+
+function answerBodyMultipleChoiceTable(
+  state = initialAnswerBodyMultipleChoiceTable,
+  { type, payload }
+) {
+  switch (type) {
+    default:
+      return state;
+  }
+}
+
+// =================== Root Reducer =================
+
 export const rootReducer = combineReducers({
-  exams,
-  questions,
-  appState,
+  examTable,
+  questionTable,
+  answerTable,
+  questionBodyMultipleChoiceTable,
+  questionBodyFreeTextTable,
+  answerBodyFreeTextTable,
+  answerBodyMultipleChoiceTable,
+  examState,
 });
 
 export default rootReducer;

@@ -1,15 +1,29 @@
 import React from "react";
-import { freeTextFromName } from "../../../constants/formConstants";
+import { useDispatch, useSelector } from "react-redux";
+
+import { freeTextFormName } from "../../../constants/constants";
 import { Textarea, Button } from "theme-ui";
+import {
+  answerFreeTextQuestion,
+} from "../../../redux/actions";
 
 export default function FreeTexTFreeTextQuestion({
   register,
   handleSubmit,
   watch,
   errors,
-  onSubmit,
   question,
 }) {
+  const dispatch = useDispatch();
+
+  const { questionId, answerType, questionText, questionTitle } = question;
+
+  const onSubmit = (data) => {
+    const answer = data.freeTextFormName;
+    const payload = { questionId, answer };
+    dispatch(answerFreeTextQuestion(payload));
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Textarea
@@ -23,7 +37,7 @@ export default function FreeTexTFreeTextQuestion({
           e.preventDefault();
           return false;
         }}
-        name={freeTextFromName}
+        name={freeTextFormName}
         defaultValue={question.storedAnswer}
         ref={register}
       />

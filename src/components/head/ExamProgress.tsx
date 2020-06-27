@@ -4,9 +4,10 @@ import { Heading, Progress, Flex } from "theme-ui";
 import { TRootState } from "../../types/exam";
 
 export default function ExamProgress() {
-  const exams = useSelector((state: TRootState) => state.exams);
-  const questionsById = exams.byId[exams.currentExam.id].questionsById;
-  const currentQuestionIndex = exams.currentExam.currentQuestionIndex;
+  const exams = useSelector((state: TRootState) => state.examTable);
+  const {currentExamId, currentQuestionIndex} = useSelector((state: TRootState) => state.examState);
+
+  const questionsById = exams.byId[currentExamId].questionsById;
 
   return (
     <Flex
@@ -19,7 +20,7 @@ export default function ExamProgress() {
       }}
     >
       <Heading as="h1" sx={{ marginBottom: "2rem" }}>
-        {exams.byId[exams.currentExam.id].name}
+        {exams.byId[currentExamId].name}
       </Heading>
       <Progress max={questionsById.length} value={currentQuestionIndex} />
     </Flex>

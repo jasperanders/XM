@@ -12,15 +12,15 @@ export function answerFreeTextQuestion(payload: TAnswerFreeTextPayload) {
   return { type: ANSWER_FREE_TEXT_QUESTION, payload };
 }
 
-export function seTFreeTextQuestionStartTime(payload: TUseTimerPayload) {
+export function setQuestionStartTime(payload: TUseTimerPayload) {
   return { type: SET_QUESTION_START_TIME, payload };
 }
 
-export function seTFreeTextQuestionEndTime(payload: TUseTimerPayload) {
+export function setFreeTextQuestionEndTime(payload: TUseTimerPayload) {
   return { type: SET_QUESTION_END_TIME, payload };
 }
 
-export function nexTFreeTextQuestion() {
+export function nextFreeTextQuestion() {
   return { type: NEXT_QUESTION };
 }
 
