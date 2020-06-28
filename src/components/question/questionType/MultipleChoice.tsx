@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Label, Checkbox, Button } from "theme-ui";
 import { TRootState } from "../../../types/exam";
 import { v4 } from "uuid";
+import { nextQuestion } from "../../../redux/actions";
 
 export default function MultipleChoiceQuestion({
   register,
@@ -17,34 +18,32 @@ export default function MultipleChoiceQuestion({
     (state: TRootState) =>
       state.questionBodyMultipleChoiceTable.byId[question.questionId]
   );
+  const currentExam = useSelector((state: TRootState) => state.examTable);
+  const { currentExamId } = useSelector((state: TRootState) => state.examState);
 
   const { possibleAnswers } = questionBody;
 
-  // const onSubmit = (data) => {
-  //   let action = undefined;
-  //   switch (answerType) {
-  //     case "freeText":
-  //       const answer = data[freeTextFromName];
-  //       const payload = { questionId, answer };
-  //       action = answerFreeTextQuestion(payload);
-  //       break;
+  const onSubmit = (data) => {
+    console.log(data);
+    //   let action = undefined;
+    //   switch (answerType) {
+    //     case "freeText":
+    //       const answer = data[freeTextFromName];
+    //       const payload = { questionId, answer };
+    //       action = answerFreeTextQuestion(payload);
+    //       break;
 
-  //     default:
-  //       break;
-  //   }
+    //     default:
+    //       break;
+    //   }
 
-  //   dispatch(action);
-  //   dispatch(seTFreeTextQuestionEndTime({ questionId }));
-  //   dispatch(nexTFreeTextQuestion());
-  // };
+    //   dispatch(action);
+    //   dispatch(seTFreeTextQuestionEndTime({ questionId }));
+    dispatch(nextQuestion({ currentExam: currentExam.byId[currentExamId] }));
+  };
 
   return (
-    <form
-      onSubmit={handleSubmit((data) => {
-        console.log("Data is");
-        console.log(data);
-      })}
-    >
+    <form onSubmit={handleSubmit(onSubmit)}>
       {possibleAnswers.map((possibleAnswer, index) => {
         return (
           <div>
