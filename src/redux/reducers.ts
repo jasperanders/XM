@@ -60,12 +60,9 @@ function examState(state = initialExamState, { type, payload }) {
   switch (type) {
     case NEXT_QUESTION:
       return produce(state, (d) => {
-        const examLength = payload.currentExam.questionsById.length;
-        if (d.currentQuestionIndex < examLength - 1) {
-          d.currentQuestionIndex += 1;
-          d.currentQuestionId =
-            payload.currentExam.questionsById[d.currentQuestionIndex];
-        }
+        d.currentQuestionIndex += 1;
+        d.currentQuestionId =
+          payload.currentExam.questionsById[d.currentQuestionIndex];
       });
     case SET_APP_TIMER:
       return produce(state, (draftState) => {
@@ -115,9 +112,9 @@ function answerBodyFreeTextTable(
 ) {
   switch (type) {
     case ANSWER_FREE_TEXT_QUESTION:
-      return produce(state, (draftState) => {
-        let question = draftState.byId[payload.questionId];
-        question.answerText = payload.answerText;
+      return produce(state, (d) => {
+        const answer = d.byId[payload.questionId];
+        answer.answerText = payload.answer;
       });
 
     default:

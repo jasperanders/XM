@@ -3,9 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { freeTextFormName } from "../../../constants/constants";
 import { Textarea, Button } from "theme-ui";
-import {
-  answerFreeTextQuestion,
-} from "../../../redux/actions";
+import { answerFreeTextQuestion, nextQuestion } from "../../../redux/actions";
+import { TRootState } from "../../../types/exam";
 
 export default function FreeTexTFreeTextQuestion({
   register,
@@ -14,14 +13,16 @@ export default function FreeTexTFreeTextQuestion({
   errors,
   question,
 }) {
+  const { questionId } = question;
   const dispatch = useDispatch();
-
-  const { questionId, answerType, questionText, questionTitle } = question;
+  const currentExam = useSelector((state: TRootState) => state.examTable);
+  const { currentExamId } = useSelector((state: TRootState) => state.examState);
 
   const onSubmit = (data) => {
-    const answer = data.freeTextFormName;
+    const answer = data[freeTextFormName];
     const payload = { questionId, answer };
     dispatch(answerFreeTextQuestion(payload));
+    dispatch(nextQuestion({ currentExam: currentExam.byId[currentExamId] }));
   };
 
   return (

@@ -18,91 +18,91 @@ import {
 } from "../types/exam";
 
 // ============== Task 01 ===================
-
-const question_01_body: TQuestionBodyFreeText = {
-  questionBodyId: v4(),
-  title: "That is the Question",
-  text: "What does the Fox say?",
-};
-
-const answer_01_body: TAnswerBodyFreeText = {
-  answerBodyId: v4(),
-  answerText: "",
-};
-
 const question_01: TQuestion = {
   questionId: v4(),
   questionType: "freeText",
-  bodyId: question_01_body.questionBodyId,
   timeLimitMs: 5000,
+  title: "That is the Question",
+  text: "What does the Fox say?",
 };
 
 const answer_01: TAnswer = {
   answerId: v4(),
   questionId: question_01.questionId,
-  bodyId: answer_01_body.answerBodyId,
   timeStart: null,
   timeEnd: null,
   timeExpired: false,
 };
 
-// ============== Task 02 ===================
-
-const question_02_body: TQuestionBodyFreeText = {
+const question_01_body: TQuestionBodyFreeText = {
   questionBodyId: v4(),
-  title: "Even better Question",
-  text: "How many roads must a man walk down?",
+  questionId: question_01.questionId,
 };
 
-const answer_02_body: TAnswerBodyFreeText = {
+const answer_01_body: TAnswerBodyFreeText = {
+  answerId: question_01.questionId,
+  questionId: question_01_body.questionId,
   answerBodyId: v4(),
   answerText: "",
 };
 
+// ============== Task 02 ===================
 const question_02: TQuestion = {
   questionId: v4(),
   questionType: "freeText",
-  bodyId: question_02_body.questionBodyId,
   timeLimitMs: 5000,
+  title: "Even better Question",
+  text: "How many roads must a man walk down?",
 };
 
 const answer_02: TAnswer = {
   answerId: v4(),
   questionId: question_02.questionId,
-  bodyId: answer_02_body.answerBodyId,
   timeStart: null,
   timeEnd: null,
   timeExpired: false,
 };
 
-// ============== Task 03 ===================
-
-const question_03_body: TQuestionBodyMultipleChoice = {
+const question_02_body: TQuestionBodyFreeText = {
   questionBodyId: v4(),
-  title: "Your choice",
-  text: "Yes or No?",
-  possibleAnswers: ["Yes", "No"],
+  questionId: question_02.questionId,
 };
 
-const answer_03_body: TAnswerBodyMultipleChoice = {
+const answer_02_body: TAnswerBodyFreeText = {
   answerBodyId: v4(),
-  selectedAnswers: [],
+  questionId: question_02.questionId,
+  answerId: answer_02.answerId,
+  answerText: "",
 };
+
+// ============== Task 03 ===================
 
 const question_03: TQuestion = {
   questionId: v4(),
   questionType: "multipleChoice",
-  bodyId: question_03_body.questionBodyId,
   timeLimitMs: 5000,
+  title: "Your choice",
+  text: "Yes or No?",
 };
 
 const answer_03: TAnswer = {
   answerId: v4(),
   questionId: question_03.questionId,
-  bodyId: answer_03_body.answerBodyId,
   timeStart: null,
   timeEnd: null,
   timeExpired: false,
+};
+
+const question_03_body: TQuestionBodyMultipleChoice = {
+  questionId: question_03.questionId,
+  possibleAnswers: ["Yes", "No"],
+};
+
+const answer_03_body: TAnswerBodyMultipleChoice = {
+  questionId: question_03.questionId,
+  answerId: answer_03.answerId,
+  answerBodyId: v4(),
+  selectedAnswers: [],
 };
 
 // =============== exam_01 ===========
@@ -138,7 +138,7 @@ export const initialAnswerTable: TAnswerTable = {
     [answer_02.questionId]: answer_02,
     [answer_03.questionId]: answer_03,
   },
-  allIds: [answer_01.answerId, answer_02.answerId, answer_03.answerId],
+  allIds: [answer_01.questionId, answer_02.questionId, answer_03.questionId],
 };
 
 export const initialExamTable: TExamTable = {
@@ -151,32 +151,32 @@ export const initialExamTable: TExamTable = {
 // ================ Body Table ===================
 export const initialQuestionBodyFreeTextTable: TQuestionBodyFreeTextTable = {
   byId: {
-    [question_01_body.questionBodyId]: question_01_body,
-    [question_02_body.questionBodyId]: question_02_body,
+    [question_01_body.questionId]: question_01_body,
+    [question_02_body.questionId]: question_02_body,
   },
-  allIds: [question_01_body.questionBodyId, question_02_body.questionBodyId],
+  allIds: [question_01_body.questionId, question_02_body.questionId],
 };
 
 export const initialQuestionBodyMultipleChoiceTable: TQuestionBodyMultipleChoiceTable = {
   byId: {
-    [question_03_body.questionBodyId]: question_03_body,
+    [question_03_body.questionId]: question_03_body,
   },
-  allIds: [question_03_body.questionBodyId],
+  allIds: [question_03_body.questionId],
 };
 
 export const initialAnswerBodyFreeTextTable: TAnswerBodyFreeTextTable = {
   byId: {
-    [answer_01_body.answerBodyId]: answer_01_body,
-    [answer_02_body.answerBodyId]: answer_02_body,
+    [answer_01_body.questionId]: answer_01_body,
+    [answer_02_body.questionId]: answer_02_body,
   },
-  allIds: [answer_03_body.answerBodyId],
+  allIds: [answer_01_body.questionId, answer_01_body.questionId],
 };
 
 export const initialAnswerBodyMultipleChoiceTable: TAnswerBodyMultipleChoiceTable = {
   byId: {
-    [answer_03_body.answerBodyId]: answer_03_body,
+    [answer_03_body.questionId]: answer_03_body,
   },
-  allIds: [answer_01_body.answerBodyId, answer_02_body.answerBodyId],
+  allIds: [answer_03_body.questionId],
 };
 
 // =============== Exam State ====================
@@ -184,7 +184,7 @@ export const initialAnswerBodyMultipleChoiceTable: TAnswerBodyMultipleChoiceTabl
 export const initialExamState: TExamState = {
   currentExamId: exam_01.examId,
   currentQuestionIndex: 0,
-  currentQuestionId: question_01.questionId,
+  currentQuestionId: question_03.questionId,
   currentTime: null,
   timerIsActive: true,
 };

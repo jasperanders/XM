@@ -20,8 +20,8 @@ export function setFreeTextQuestionEndTime(payload: TUseTimerPayload) {
   return { type: SET_QUESTION_END_TIME, payload };
 }
 
-export function nextFreeTextQuestion() {
-  return { type: NEXT_QUESTION };
+export function nextQuestion(payload) {
+  return { type: NEXT_QUESTION, payload };
 }
 
 export function previousQuestion(payload) {

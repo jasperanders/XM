@@ -1,11 +1,13 @@
 import React from "react";
-import { useSelector, RootStateOrAny } from "react-redux";
+import { useSelector } from "react-redux";
 import { Heading, Progress, Flex } from "theme-ui";
 import { TRootState } from "../../types/exam";
 
 export default function ExamProgress() {
   const exams = useSelector((state: TRootState) => state.examTable);
-  const {currentExamId, currentQuestionIndex} = useSelector((state: TRootState) => state.examState);
+  const { currentExamId, currentQuestionIndex } = useSelector(
+    (state: TRootState) => state.examState
+  );
 
   const questionsById = exams.byId[currentExamId].questionsById;
 

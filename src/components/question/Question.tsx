@@ -1,19 +1,20 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import FreeTextQuestion from "./questionType/FreeTextQuestion";
-import { TRootState } from "../../types/exam";
+import MultipleChoiceQuestion from "./questionType/MultipleChoice";
+import { TQuestion } from "../../types/exam";
 import { Heading } from "theme-ui";
 
 import Timer from "../timer/Timer";
 import { setQuestionStartTime } from "../../redux/actions";
 
-export default function Question({ question }) {
+export default function Question({ question }: TProps) {
   const dispatch = useDispatch();
 
   const { register, handleSubmit, watch, errors, reset } = useForm();
 
-  const { questionId, answerType, questionText, questionTitle } = question;
+  const { questionId, questionType, title, text } = question;
 
   useEffect(() => {
     dispatch(setQuestionStartTime({ questionId }));
@@ -21,10 +22,20 @@ export default function Question({ question }) {
   }, [questionId]);
 
   const questionBody = () => {
-    switch (answerType) {
+    switch (questionType) {
       case "freeText":
         return (
           <FreeTextQuestion
+            register={register}
+            handleSubmit={handleSubmit}
+            watch={watch}
+            errors={errors}
+            question={question}
+          />
+        );
+      case "multipleChoice":
+        return (
+          <MultipleChoiceQuestion
             register={register}
             handleSubmit={handleSubmit}
             watch={watch}
@@ -39,10 +50,14 @@ export default function Question({ question }) {
 
   return (
     <div>
-      <Heading as={"h2"}>{questionTitle}</Heading>
-      <p>{questionText}</p>
+      <Heading as={"h2"}>{title}</Heading>
+      <p>{text}</p>
       {questionBody()}
       <Timer question={question}></Timer>
     </div>
   );
+}
+
+interface TProps {
+  question: TQuestion;
 }

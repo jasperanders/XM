@@ -4,44 +4,41 @@ export interface TQuestion {
   questionId: string;
   timeLimitMs: number;
   questionType: "freeText" | "multipleChoice";
-  bodyId: string;
+  title: string;
+  text: string;
 }
 
 export interface TQuestionBodyFreeText {
   questionBodyId: string;
-  // questionId: string;
-  title: string;
-  text: string;
+  questionId: string;
 }
 
 export interface TQuestionBodyMultipleChoice {
-  questionBodyId: string;
-  // questionId: string;
-  title: string;
-  text: string;
+  questionId: string;
   possibleAnswers: Array<string>;
 }
 
 // ================ Answers ===========================
 
 export interface TAnswer {
-  answerId: string;
   questionId: string;
+  answerId: string;
   timeStart: number;
   timeEnd: number;
   timeExpired: boolean;
-  bodyId: string;
 }
 
 export interface TAnswerBodyFreeText {
   answerBodyId: string;
-  // answerId: string;
+  questionId: string;
+  answerId: string;
   answerText: string;
 }
 
 export interface TAnswerBodyMultipleChoice {
   answerBodyId: string;
-  // answerId: string;
+  questionId: string;
+  answerId: string;
   selectedAnswers: Array<string>;
 }
 
@@ -57,21 +54,21 @@ export interface TExam {
 
 export interface TExamTable {
   byId: {
-    [id: string]: TExam;
+    [examId: string]: TExam;
   };
   allIds: Array<string>;
 }
 
 export interface TQuestionTable {
   byId: {
-    [id: string]: TQuestion;
+    [questionId: string]: TQuestion;
   };
   allIds: Array<string>;
 }
 
 export interface TAnswerTable {
   byId: {
-    [id: string]: TAnswer;
+    [questionId: string]: TAnswer;
   };
   allIds: Array<string>;
 }
@@ -80,28 +77,28 @@ export interface TAnswerTable {
 
 export interface TQuestionBodyFreeTextTable {
   byId: {
-    [id: string]: TQuestionBodyFreeText;
+    [questionId: string]: TQuestionBodyFreeText;
   };
   allIds: Array<string>;
 }
 
 export interface TQuestionBodyMultipleChoiceTable {
   byId: {
-    [id: string]: TQuestionBodyMultipleChoice;
+    [questionId: string]: TQuestionBodyMultipleChoice;
   };
   allIds: Array<string>;
 }
 
 export interface TAnswerBodyFreeTextTable {
   byId: {
-    [id: string]: TAnswerBodyFreeText;
+    [questionId: string]: TAnswerBodyFreeText;
   };
   allIds: Array<string>;
 }
 
 export interface TAnswerBodyMultipleChoiceTable {
   byId: {
-    [id: string]: TAnswerBodyMultipleChoice;
+    [questionId: string]: TAnswerBodyMultipleChoice;
   };
   allIds: Array<string>;
 }
