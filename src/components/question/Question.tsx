@@ -60,7 +60,6 @@ export default function Question({ question }: TProps) {
         currentExam={currentExam}
         answerQuestionAction={currentAnswerAction}
       ></Timer>
-      <button onClick={() => console.log(getValues())}> Click</button>
     </div>
   );
 }

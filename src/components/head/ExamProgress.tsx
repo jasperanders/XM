@@ -24,7 +24,7 @@ export default function ExamProgress() {
       <Heading as="h1" sx={{ marginBottom: "2rem" }}>
         {exams.byId[currentExamId].name}
       </Heading>
-      <Progress max={questionsById.length} value={currentQuestionIndex} />
+      <Progress max={questionsById.length} value={currentQuestionIndex + 1} />
     </Flex>
   );
 }

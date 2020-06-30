@@ -40,10 +40,6 @@ export function previousQuestion(payload) {
   return { type: PREVIOUS_QUESTION, payload };
 }
 
-export function setAppTimer(payload) {
-  return { type: SET_APP_TIMER, payload };
-}
-
 export function countDownAppTimer(payload) {
   return { type: COUNT_DOWN_APP_TIMER, payload };
 }

@@ -111,6 +111,7 @@ export interface TExamState {
   currentQuestionId: string;
   currentTime: number;
   timerIsActive: boolean;
+  examFinished: boolean;
 }
 
 // ============== Root State =======================

@@ -109,7 +109,7 @@ export default {
   cards: {
     primary: {
       backgroundColor: "muted",
-      padding: 2,
+      padding: "2rem",
       borderRadius: 4,
       boxShadow:
         "0 1px 1px 0 rgba(66, 66, 66, 0.08), 0 1px 3px 1px rgba(66, 66, 66, 0.16)",

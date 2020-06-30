@@ -19,6 +19,7 @@ import {
   initialAnswerBodyFreeTextTable,
   initialQuestionBodyFreeTextTable,
 } from "./initialState";
+import { history } from "../index";
 
 // ================= Basic Tables =====================
 
@@ -61,23 +62,15 @@ function examState(state = initialExamState, { type, payload }) {
   switch (type) {
     case NEXT_QUESTION:
       return produce(state, (d) => {
-        d.currentQuestionIndex += 1;
-        d.currentQuestionId =
-          payload.currentExam.questionsById[d.currentQuestionIndex];
-      });
-    case SET_APP_TIMER:
-      return produce(state, (draftState) => {
-        draftState.currentTime = payload.timeLimit;
-        return draftState;
-      });
-
-    case COUNT_DOWN_APP_TIMER:
-      return produce(state, (draftState) => {
-        if (draftState.currentTime > 0) {
-          draftState.currentTime -= payload.countDownBy;
-          return draftState;
+        if (
+          payload.currentExam.questionsById.length >
+          d.currentQuestionIndex + 1 // else index out of bounds
+        ) {
+          d.currentQuestionIndex += 1;
+          d.currentQuestionId =
+            payload.currentExam.questionsById[d.currentQuestionIndex];
         } else {
-          console.log("TimeOut");
+          d.examFinished = true;
         }
       });
     default:

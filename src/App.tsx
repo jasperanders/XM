@@ -4,6 +4,7 @@ import Question from "./components/question/Question";
 import { TRootState } from "./types/examTypes";
 import Layout from "./components/layout/Layout";
 import ExamProgress from "./components/head/ExamProgress";
+import Routes from "./routes/Routs";
 
 function App() {
   const questions = useSelector((state: TRootState) => state.questionTable);
@@ -13,10 +14,7 @@ function App() {
 
   return (
     <div className="App">
-      <Layout
-        mainContent={<Question question={questions.byId[currentQuestionId]} />}
-        header={<ExamProgress />}
-      />
+      <Routes />
     </div>
   );
 }

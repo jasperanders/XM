@@ -7,7 +7,10 @@ import configureAppStore from "./redux/store";
 import { saveState } from "./redux/localStorage";
 import { ThemeProvider } from "theme-ui";
 import theme from "./theme";
+import { Router } from "react-router-dom";
+import { createBrowserHistory } from "history";
 
+export const history = createBrowserHistory();
 export const store = configureAppStore();
 
 store.subscribe(() => {
@@ -17,9 +20,11 @@ store.subscribe(() => {
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <App />
-      </ThemeProvider>
+      <Router history={history}>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </Router>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

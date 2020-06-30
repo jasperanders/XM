@@ -187,6 +187,7 @@ export const initialExamState: TExamState = {
   currentQuestionId: exam_01.questionsById[0],
   currentTime: null,
   timerIsActive: true,
+  examFinished: false,
 };
 
 // =========================================

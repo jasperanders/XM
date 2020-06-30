@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Box, Grid, Card, Container, Flex } from "theme-ui";
 
 export default function Layout({
@@ -16,7 +16,11 @@ export default function Layout({
             <Card>{sidePanel}</Card>
           </Box>
         )}
-        {mainContent && <Card sx={{ flexGrow: 0 }}>{mainContent}</Card>}
+        {mainContent && (
+          <Card sx={{ flexGrow: 0 }}>
+            <Suspense fallback={<div>Loading...</div>}>{mainContent}</Suspense>
+          </Card>
+        )}
       </Flex>
     </Container>
   );
