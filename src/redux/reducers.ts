@@ -129,7 +129,6 @@ function answerBodyMultipleChoiceTable(
 ) {
   switch (type) {
     case ANSWER_MULTIPLE_CHOICE_QUESTION:
-      console.log(payload.selectedAnswers);
       return produce(state, (d) => {
         d.byId[payload.questionId].selectedAnswers = payload.selectedAnswers;
       });
