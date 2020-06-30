@@ -1,10 +1,13 @@
-import React from "react";
-import { multipleChoiceFormName } from "../../../constants/constants";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Label, Checkbox, Button } from "theme-ui";
-import { TRootState } from "../../../types/exam";
+import { TRootState } from "../../../types/examTypes";
 import { v4 } from "uuid";
-import { nextQuestion } from "../../../redux/actions";
+import {
+  nextQuestion,
+  answerMultipleChoiceQuestion,
+  setAnswerEndTime,
+} from "../../../redux/actions";
 
 export default function MultipleChoiceQuestion({
   register,
@@ -12,6 +15,8 @@ export default function MultipleChoiceQuestion({
   watch,
   errors,
   question,
+  getValues,
+  setCurrentAnswerAction,
 }) {
   const dispatch = useDispatch();
   const questionBody = useSelector(
@@ -19,40 +24,64 @@ export default function MultipleChoiceQuestion({
       state.questionBodyMultipleChoiceTable.byId[question.questionId]
   );
   const currentExam = useSelector((state: TRootState) => state.examTable);
-  const { currentExamId } = useSelector((state: TRootState) => state.examState);
+  // const currentExam = useSelector((state: TRootState) => state.examTable);
+  const { currentExamId, currentQuestionId } = useSelector(
+    (state: TRootState) => state.examState
+  );
+
+  const makeSelectedAnswers = (data) => {
+    const { multipleChoice } = data;
+    let selectedAnswers = [];
+    possibleAnswers.forEach((el, i) => {
+      console.log(multipleChoice[i]);
+      console.log(el);
+      if (data.multipleChoice[i]) {
+        selectedAnswers.push(el);
+      }
+    });
+    console.log(selectedAnswers);
+    return selectedAnswers;
+  };
+
+  useEffect(() => {
+    setCurrentAnswerAction(() => {
+      return () => {
+        // nested: true returns values as if they were submitted
+        const selectedAnswers = makeSelectedAnswers(getValues({ nest: true }));
+        console.log(selectedAnswers);
+        console.log("selectedAnswers");
+        return answerMultipleChoiceQuestion({
+          questionId: currentQuestionId,
+          selectedAnswers,
+        });
+      };
+    });
+  }, [question]);
 
   const { possibleAnswers } = questionBody;
 
   const onSubmit = (data) => {
-    console.log(data);
-    //   let action = undefined;
-    //   switch (answerType) {
-    //     case "freeText":
-    //       const answer = data[freeTextFromName];
-    //       const payload = { questionId, answer };
-    //       action = answerFreeTextQuestion(payload);
-    //       break;
-
-    //     default:
-    //       break;
-    //   }
-
-    //   dispatch(action);
-    //   dispatch(seTFreeTextQuestionEndTime({ questionId }));
+    const selectedAnswers = makeSelectedAnswers(data);
+    dispatch(
+      answerMultipleChoiceQuestion({
+        questionId: currentQuestionId,
+        selectedAnswers,
+      })
+    );
+    dispatch(setAnswerEndTime({ questionId: currentQuestionId }));
     dispatch(nextQuestion({ currentExam: currentExam.byId[currentExamId] }));
   };
-
+  // console.log(watchAll);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {possibleAnswers.map((possibleAnswer, index) => {
         return (
-          <div>
+          <div key={v4()}>
             <Label>
               {/* <Controller as={Checkbox} name={multipleChoiceFormName} /> */}
               <Checkbox
-                key={v4()}
                 defaultChecked={false}
-                name={multipleChoiceFormName + index}
+                name={`multipleChoice[${index}]`}
                 ref={register}
               />
               {possibleAnswer}

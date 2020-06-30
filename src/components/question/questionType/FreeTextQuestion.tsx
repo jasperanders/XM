@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { freeTextFormName } from "../../../constants/constants";
 import { Textarea, Button } from "theme-ui";
 import { answerFreeTextQuestion, nextQuestion } from "../../../redux/actions";
-import { TRootState } from "../../../types/exam";
+import { TRootState } from "../../../types/examTypes";
 
 export default function FreeTexTFreeTextQuestion({
   register,

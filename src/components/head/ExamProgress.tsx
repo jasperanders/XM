@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Heading, Progress, Flex } from "theme-ui";
-import { TRootState } from "../../types/exam";
+import { TRootState } from "../../types/examTypes";
 
 export default function ExamProgress() {
   const exams = useSelector((state: TRootState) => state.examTable);

@@ -2,8 +2,9 @@ import { combineReducers } from "@reduxjs/toolkit";
 import produce from "immer";
 import {
   ANSWER_FREE_TEXT_QUESTION,
-  SET_QUESTION_START_TIME,
-  SET_QUESTION_END_TIME,
+  ANSWER_MULTIPLE_CHOICE_QUESTION,
+  SET_ANSWER_START_TIME,
+  SET_ANSWER_END_TIME,
   NEXT_QUESTION,
   SET_APP_TIMER,
   COUNT_DOWN_APP_TIMER,
@@ -30,16 +31,16 @@ function questionTable(state = initialQuestionTable, { type, payload }) {
 
 function answerTable(state = initialAnswerTable, { type, payload }) {
   switch (type) {
-    case SET_QUESTION_START_TIME:
-      return produce(state, (draftState) => {
-        const answer = draftState.byId[payload.questionId];
+    case SET_ANSWER_START_TIME:
+      return produce(state, (d) => {
+        const answer = d.byId[payload.questionId];
         if (answer.timeStart === null) {
           answer.timeStart = Date.now();
         }
       });
-    case SET_QUESTION_END_TIME:
-      return produce(state, (draftState) => {
-        let answer = draftState.byId[payload.questionId];
+    case SET_ANSWER_END_TIME:
+      return produce(state, (d) => {
+        let answer = d.byId[payload.questionId];
         answer.timeEnd = Date.now();
         answer.timeExpired = true;
       });
@@ -127,6 +128,11 @@ function answerBodyMultipleChoiceTable(
   { type, payload }
 ) {
   switch (type) {
+    case ANSWER_MULTIPLE_CHOICE_QUESTION:
+      console.log(payload.selectedAnswers);
+      return produce(state, (d) => {
+        d.byId[payload.questionId].selectedAnswers = payload.selectedAnswers;
+      });
     default:
       return state;
   }

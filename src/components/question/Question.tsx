@@ -1,25 +1,28 @@
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import FreeTextQuestion from "./questionType/FreeTextQuestion";
 import MultipleChoiceQuestion from "./questionType/MultipleChoice";
-import { TQuestion } from "../../types/exam";
+import { TQuestion, TRootState } from "../../types/examTypes";
 import { Heading } from "theme-ui";
 
-import Timer from "../timer/Timer";
-import { setQuestionStartTime } from "../../redux/actions";
+import Timer from "../timer/Timer"; //!Important
+import { setAnswerStartTime } from "../../redux/actions";
 
 export default function Question({ question }: TProps) {
-  const dispatch = useDispatch();
-
-  const { register, handleSubmit, watch, errors, reset } = useForm();
-
+  const [currentAnswerAction, setCurrentAnswerAction] = useState(() => {});
   const { questionId, questionType, title, text } = question;
+  const dispatch = useDispatch();
+  const { currentExamId } = useSelector((state: TRootState) => state.examState);
+  const currentExam = useSelector(
+    (state: TRootState) => state.examTable.byId[currentExamId]
+  );
+  const { register, handleSubmit, watch, errors, reset, getValues } = useForm();
 
   useEffect(() => {
-    dispatch(setQuestionStartTime({ questionId }));
+    dispatch(setAnswerStartTime({ questionId }));
     reset();
-  }, [questionId]);
+  }, [questionId, dispatch, reset]);
 
   const questionBody = () => {
     switch (questionType) {
@@ -31,6 +34,7 @@ export default function Question({ question }: TProps) {
             watch={watch}
             errors={errors}
             question={question}
+            // getValues={getValues}
           />
         );
       case "multipleChoice":
@@ -41,19 +45,25 @@ export default function Question({ question }: TProps) {
             watch={watch}
             errors={errors}
             question={question}
+            getValues={getValues}
+            setCurrentAnswerAction={setCurrentAnswerAction}
           />
         );
       default:
         return <div>Something went wrong</div>;
     }
   };
-
   return (
     <div>
       <Heading as={"h2"}>{title}</Heading>
       <p>{text}</p>
       {questionBody()}
-      <Timer question={question}></Timer>
+      <Timer
+        questionId={questionId}
+        currentExam={currentExam}
+        answerQuestionAction={currentAnswerAction}
+      ></Timer>
+      <button onClick={() => console.log(getValues())}> Click</button>
     </div>
   );
 }

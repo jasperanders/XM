@@ -15,13 +15,13 @@ import {
   TQuestionBodyFreeTextTable,
   TAnswerBodyFreeTextTable,
   TAnswerBodyMultipleChoiceTable,
-} from "../types/exam";
+} from "../types/examTypes";
 
 // ============== Task 01 ===================
 const question_01: TQuestion = {
   questionId: v4(),
   questionType: "freeText",
-  timeLimitMs: 5000,
+  timeLimitMs: 4000,
   title: "That is the Question",
   text: "What does the Fox say?",
 };
@@ -80,7 +80,7 @@ const answer_02_body: TAnswerBodyFreeText = {
 const question_03: TQuestion = {
   questionId: v4(),
   questionType: "multipleChoice",
-  timeLimitMs: 5000,
+  timeLimitMs: 6000,
   title: "Your choice",
   text: "Yes or No?",
 };
@@ -111,9 +111,9 @@ const exam_01: TExam = {
   examId: v4(),
   name: "Platform Economy",
   questionsById: [
+    question_03.questionId,
     question_01.questionId,
     question_02.questionId,
-    question_03.questionId,
   ],
 };
 
@@ -184,7 +184,7 @@ export const initialAnswerBodyMultipleChoiceTable: TAnswerBodyMultipleChoiceTabl
 export const initialExamState: TExamState = {
   currentExamId: exam_01.examId,
   currentQuestionIndex: 0,
-  currentQuestionId: question_03.questionId,
+  currentQuestionId: exam_01.questionsById[0],
   currentTime: null,
   timerIsActive: true,
 };

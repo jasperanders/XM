@@ -1,8 +1,13 @@
-import { TExam } from "./exam";
+import { TExam } from "./examTypes";
 
 export interface TAnswerFreeTextPayload {
   questionId: string;
   answer: string;
+}
+
+export interface TAnswerMultipleChoicePayload {
+  questionId: string;
+  selectedAnswers: Array<string>;
 }
 
 export interface TUseTimerPayload {
