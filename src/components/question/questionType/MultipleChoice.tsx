@@ -8,26 +8,32 @@ import {
   answerMultipleChoiceQuestion,
   setAnswerEndTime,
 } from "../../../redux/actions";
+import { multipleChoiceFormName } from "../../../constants/constants";
 
 export default function MultipleChoiceQuestion({
   register,
   handleSubmit,
-  watch,
-  errors,
   question,
   getValues,
   setCurrentAnswerAction,
 }) {
+  /**
+   * Redux hooks
+   */
   const dispatch = useDispatch();
+
   const questionBody = useSelector(
     (state: TRootState) =>
       state.questionBodyMultipleChoiceTable.byId[question.questionId]
   );
+
   const currentExam = useSelector((state: TRootState) => state.examTable);
-  // const currentExam = useSelector((state: TRootState) => state.examTable);
-  const { currentExamId, currentQuestionId } = useSelector(
-    (state: TRootState) => state.examState
-  );
+
+  const { currentExamId } = useSelector((state: TRootState) => state.examState);
+
+  /**
+   * miscellaneous functions
+   */
 
   const makeSelectedAnswers = (data) => {
     const { multipleChoice } = data;
@@ -43,35 +49,42 @@ export default function MultipleChoiceQuestion({
     return selectedAnswers;
   };
 
+  /**
+   * Effect Hooks
+   */
+
   useEffect(() => {
     setCurrentAnswerAction(() => {
       return () => {
-        // nested: true returns values as if they were submitted
+        // {nested: true} returns values as if they were submitted
         const selectedAnswers = makeSelectedAnswers(getValues({ nest: true }));
         console.log(selectedAnswers);
         console.log("selectedAnswers");
         return answerMultipleChoiceQuestion({
-          questionId: currentQuestionId,
+          questionId,
           selectedAnswers,
         });
       };
     });
   }, [question]);
 
-  const { possibleAnswers } = questionBody;
+  /**
+   * Destructuring
+   */
+
+  const { possibleAnswers, questionId } = questionBody;
 
   const onSubmit = (data) => {
     const selectedAnswers = makeSelectedAnswers(data);
     dispatch(
       answerMultipleChoiceQuestion({
-        questionId: currentQuestionId,
+        questionId: questionId,
         selectedAnswers,
       })
     );
-    dispatch(setAnswerEndTime({ questionId: currentQuestionId }));
+    dispatch(setAnswerEndTime({ questionId: questionId }));
     dispatch(nextQuestion({ currentExam: currentExam.byId[currentExamId] }));
   };
-  // console.log(watchAll);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {possibleAnswers.map((possibleAnswer, index) => {
@@ -81,7 +94,7 @@ export default function MultipleChoiceQuestion({
               {/* <Controller as={Checkbox} name={multipleChoiceFormName} /> */}
               <Checkbox
                 defaultChecked={false}
-                name={`multipleChoice[${index}]`}
+                name={`${multipleChoiceFormName}[${index}]`}
                 ref={register}
               />
               {possibleAnswer}

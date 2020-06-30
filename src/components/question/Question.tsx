@@ -31,10 +31,9 @@ export default function Question({ question }: TProps) {
           <FreeTextQuestion
             register={register}
             handleSubmit={handleSubmit}
-            watch={watch}
-            errors={errors}
             question={question}
-            // getValues={getValues}
+            getValues={getValues}
+            setCurrentAnswerAction={setCurrentAnswerAction}
           />
         );
       case "multipleChoice":
@@ -42,8 +41,6 @@ export default function Question({ question }: TProps) {
           <MultipleChoiceQuestion
             register={register}
             handleSubmit={handleSubmit}
-            watch={watch}
-            errors={errors}
             question={question}
             getValues={getValues}
             setCurrentAnswerAction={setCurrentAnswerAction}

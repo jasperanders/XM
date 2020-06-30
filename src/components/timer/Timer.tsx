@@ -10,6 +10,7 @@ export default function Timer({
   currentExam,
   answerQuestionAction,
 }) {
+  const useTimer = true;
   const dispatch = useDispatch();
   const answer = useSelector(
     (state: TRootState) => state.answerTable.byId[questionId]
@@ -28,23 +29,28 @@ export default function Timer({
   );
 
   useEffect(() => {
-    setTimeLeft(timeLimitMs / 1000);
-    const interval = setInterval(() => {
-      const now = Date.now();
-      const timeStart = store.getState().answerTable.byId[questionId].timeStart;
-      const newTimeLeft = Math.round((timeLimitMs - (now - timeStart)) / 1000);
-      if (newTimeLeft > -1) {
-        // setTimeLeft(newTimeLeft);
-      } else {
-        // dispatch(answerQuestionAction());
-        // dispatch(nextQuestion({ currentExam }));
-        // clearInterval(interval);
-      }
-    }, 1000);
+    if (useTimer) {
+      setTimeLeft(timeLimitMs / 1000);
+      const interval = setInterval(() => {
+        const now = Date.now();
+        const timeStart = store.getState().answerTable.byId[questionId]
+          .timeStart;
+        const newTimeLeft = Math.round(
+          (timeLimitMs - (now - timeStart)) / 1000
+        );
+        if (newTimeLeft > -1) {
+          setTimeLeft(newTimeLeft);
+        } else {
+          dispatch(answerQuestionAction());
+          dispatch(nextQuestion({ currentExam }));
+          clearInterval(interval);
+        }
+      }, 1000);
 
-    return () => {
-      clearInterval(interval);
-    };
+      return () => {
+        clearInterval(interval);
+      };
+    }
   }, [
     question.questionId,
     currentExam,
@@ -56,7 +62,6 @@ export default function Timer({
 
   return (
     <>
-      <button onClick={() => dispatch(answerQuestionAction())}>TimeOut</button>
       <Heading as={"h3"}>{timeLeft}</Heading>
     </>
   );
