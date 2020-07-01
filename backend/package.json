@@ -1,0 +1,13 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "the backend for the XM App",
+  "main": "index.js",
+  "author": "Jasper Anders",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "express": "^4.17.1",
+    "typescript": "^3.9.6"
+  }
+}
