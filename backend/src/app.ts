@@ -1,12 +1,15 @@
 import express, { Application, Request, Response } from "express";
 // import { db } from "./models/database";
 import mongoose from "mongoose";
+import router from "./api";
 
 const app: Application = express();
 
 app.get("/", (req: Request, res: Response) => {
   res.send("hello world");
 });
+
+app.use("/api", router);
 
 app.listen(5000, () => {
   console.log("server running");
@@ -22,4 +25,3 @@ db.once("open", function () {
   // we're connected!
   console.log("connected to db");
 });
-console.log(db);
