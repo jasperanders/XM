@@ -1,5 +1,6 @@
 import { merge, flow, groupBy, mapValues, map, omit } from 'lodash'
 /* ENDPOINT_ACL_IMPORT */
+import examAcl from './exam/acl'
 import messageAcl from './message/acl'
 import authAcl from './auth/acl'
 import userAcl from './user/acl'
@@ -11,6 +12,7 @@ const defaultPermissions = []
 const permissions = {
     ...groupBy([
         /* ENDPOINT_ACL_EXPORT */
+...examAcl,
         ...defaultPermissions,
         ...messageAcl,
         ...authAcl,

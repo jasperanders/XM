@@ -69,7 +69,7 @@ const config = {
   },
   test: {
     mongo: {
-      uri: "mongodb://localhost/testgenerator-test",
+      uri: "mongodb://localhost/xm",
       options: {
         debug: false,
         useCreateIndex: true,
