@@ -1,19 +1,19 @@
-import { Router } from 'express'
-import { middleware as query } from 'querymen'
-import { middleware as body } from 'bodymen'
-import { masterman, validateUserBeforeCreate } from 's/auth'
-import { schema } from './model'
-export User, { schema } from './model'
+import { Router } from "express";
+import { middleware as query } from "querymen";
+import { middleware as body } from "bodymen";
+import { masterman, validateUserBeforeCreate } from "s/auth";
+import { schema } from "./model";
+export User, { schema } from "./model";
 
 import {
-    index,
-    showMe,
-    show,
-    create,
-    update,
-    updatePassword,
-    destroy
-} from './controller'
+  index,
+  showMe,
+  show,
+  create,
+  update,
+  updatePassword,
+  destroy,
+} from "./controller";
 
 /**
  * @swagger
@@ -22,8 +22,8 @@ import {
  *   description: User management
  */
 
-const router = new Router()
-const { email, password, name, picture, role } = schema.tree
+const router = new Router();
+const { email, password, name, picture, role } = schema.tree;
 // TODO: Pagination docs
 /**
  * @swagger
@@ -42,7 +42,7 @@ const { email, password, name, picture, role } = schema.tree
  *        "500":
  *          description: Oh boi
  */
-router.get('/', query(), index)
+router.get("/", query(), index);
 
 /**
  * @swagger
@@ -70,7 +70,7 @@ router.get('/', query(), index)
  *        "500":
  *          description: Oh boi
  */
-router.get('/:id', show)
+router.get("/:id", show);
 
 /**
  * @swagger
@@ -106,18 +106,18 @@ router.get('/:id', show)
  *          description: Oh boi
  */
 router.post(
-    '/',
-    masterman(),
-    validateUserBeforeCreate(),
-    body({
-        email,
-        password,
-        name,
-        picture,
-        role
-    }),
-    create
-)
+  "/",
+  masterman(),
+  validateUserBeforeCreate(),
+  body({
+    email,
+    password,
+    name,
+    picture,
+    role,
+  }),
+  create
+);
 
 /**
  * @swagger
@@ -159,7 +159,7 @@ router.post(
  *        "500":
  *          description: Oh boi
  */
-router.put('/:id', body({ name, picture }), update)
+router.put("/:id", body({ name, picture }), update);
 
 /**
  * @swagger
@@ -199,12 +199,12 @@ router.put('/:id', body({ name, picture }), update)
  *          description: Oh boi
  */
 router.put(
-    '/:id/password',
-    body({
-        password
-    }),
-    updatePassword
-)
+  "/:id/password",
+  body({
+    password,
+  }),
+  updatePassword
+);
 
 /**
  * @swagger
@@ -232,6 +232,6 @@ router.put(
  *        "500":
  *          description: Oh boi
  */
-router.delete('/:id', destroy)
+router.delete("/:id", destroy);
 
-export default router
+export default router;
