@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import Question from "./components/askQuestion/Question";
+import Question from "./components/takeQuestion/Question";
 import { TRootState } from "./types/examTypes";
 import Layout from "./components/layout/Layout";
 import ExamProgress from "./components/head/ExamProgress";

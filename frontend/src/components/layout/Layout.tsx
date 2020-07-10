@@ -10,18 +10,14 @@ export default function Layout({
   return (
     <Container variant="masterContainer">
       {header && <Container>{header}</Container>}
-      <Flex sx={{ flexDirection: "column", alignItems: "center" }}>
-        {sidePanel && (
-          <Box>
-            <Card>{sidePanel}</Card>
-          </Box>
-        )}
+      <Grid columns={[1, "1fr 2fr", "1fr 2fr"]} gap={2}>
+        {sidePanel && <Card>{sidePanel}</Card>}
         {mainContent && (
-          <Card sx={{ flexGrow: 0 }}>
+          <Card>
             <Suspense fallback={<div>Loading...</div>}>{mainContent}</Suspense>
           </Card>
         )}
-      </Flex>
+      </Grid>
     </Container>
   );
 }

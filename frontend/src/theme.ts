@@ -30,6 +30,7 @@ export default {
     light: " #E8F4FF",
     inactive: "#AFC5CB",
     active: "#e74c3c",
+    warning: "#e74c3c",
   },
   text: {
     heading: {
@@ -138,6 +139,8 @@ export default {
   },
   forms: {
     textarea: {
+      marginTop: "0.5rem",
+      marginBottom: "0.5rem",
       width: "30vw",
       minWidth: "100px",
       minHeight: "100px",
@@ -152,6 +155,11 @@ export default {
       marginTop: "1rem",
       marginBottom: "1rem",
     },
+    warning: {
+      backgroundColor: "warning",
+      marginTop: "1rem",
+      marginBottom: "1rem",
+    },
     activeTab: {
       marginTop: "1rem",
       borderBottomLeftRadius: 0,
@@ -162,6 +170,9 @@ export default {
       marginTop: "1rem",
       borderBottomLeftRadius: 0,
       borderBottomRightRadius: 0,
+    },
+    tiny: {
+      backgroundColor: "secondary",
     },
   },
 };

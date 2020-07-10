@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Grid, Button, Card } from "theme-ui";
 import { castDraft } from "immer";
-import { QuestionList } from "./QuestionList";
+import QuestionList from "./QuestionList";
 import ExamList from "./ExamList";
 
 export default function MakeSidePanel() {
