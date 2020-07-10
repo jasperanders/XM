@@ -1,7 +1,12 @@
-import { Router } from 'express'
-import { middleware as body } from 'bodymen'
-import { authenticate, providerAuthenticate, logout, logoutAll } from './controller'
-import { masterman, doorman } from '~/services/auth'
+import { Router } from "express";
+import { middleware as body } from "bodymen";
+import {
+  authenticate,
+  providerAuthenticate,
+  logout,
+  logoutAll,
+} from "./controller";
+import { masterman, doorman } from "~/services/auth";
 
 /**
  * @swagger
@@ -9,7 +14,7 @@ import { masterman, doorman } from '~/services/auth'
  *   name: Authentication
  *   description: Authenticate a user
  */
-const router = new Router()
+const router = new Router();
 
 /**
  * @swagger
@@ -56,20 +61,19 @@ const router = new Router()
  *          description: Oh boi
  */
 router.post(
-    '',
-    masterman(),
-    body({
-        email: {
-            type: String,
-            required: true
-        },
-        password: {
-            type: String,
-            required: true
-        }
-    }),
-    authenticate
-)
+  "",
+  masterman(),
+  //   body({
+  //     email: {
+  //       type: String,
+  //     },
+  //     password: {
+  //       type: String,
+  //       required: true,
+  //     },
+  //   }),
+  authenticate
+);
 
 /**
  * @swagger
@@ -88,7 +92,7 @@ router.post(
  *        "500":
  *          description: Oh boi
  */
-router.post('/logout', logout)
+router.post("/logout", logout);
 
 /**
  * @swagger
@@ -107,9 +111,7 @@ router.post('/logout', logout)
  *        "500":
  *          description: Oh boi
  */
-router.post('/logout/all', logoutAll)
-
-
+router.post("/logout/all", logoutAll);
 
 /**
  * @swagger
@@ -159,14 +161,14 @@ router.post('/logout/all', logoutAll)
  *          description: Oh boi
  */
 router.post(
-    '/:provider',
-    body({
-        token: {
-            type: String,
-            required: true
-        }
-    }),
-    providerAuthenticate
-)
+  "/:provider",
+  body({
+    token: {
+      type: String,
+      required: true,
+    },
+  }),
+  providerAuthenticate
+);
 
-export default router
+export default router;
