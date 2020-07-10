@@ -57,14 +57,12 @@ export default function FreeTexTFreeTextQuestion() {
       />
       <Textarea
         rows={5}
-        columns={5}
         name={"masterAnswer"}
         placeholder={"Provide a question here."}
         ref={register}
       />
       <Textarea
         rows={10}
-        columns={20}
         name={"masterAnswer"}
         placeholder={"Provide master Answer here"}
         ref={register}

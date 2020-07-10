@@ -109,7 +109,9 @@ export default {
       padding: "1rem",
     },
     masterContainer: {
-      width: ["100%", "100%", "75%"],
+      margin: "auto",
+      marginTop: "0.5rem",
+      width: ["100%", "100%", "90%"],
       paddingLeft: "3rem",
       paddingRight: "3rem",
     },
@@ -141,7 +143,6 @@ export default {
     textarea: {
       marginTop: "0.5rem",
       marginBottom: "0.5rem",
-      width: "30vw",
       minWidth: "100px",
       minHeight: "100px",
       ":focus": {
@@ -161,13 +162,11 @@ export default {
       marginBottom: "1rem",
     },
     activeTab: {
-      marginTop: "1rem",
       borderBottomLeftRadius: 0,
       borderBottomRightRadius: 0,
     },
     mutedTab: {
       backgroundColor: "inactive",
-      marginTop: "1rem",
       borderBottomLeftRadius: 0,
       borderBottomRightRadius: 0,
     },

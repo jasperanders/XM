@@ -10,7 +10,7 @@ export default function Layout({
   return (
     <Container variant="masterContainer">
       {header && <Container>{header}</Container>}
-      <Grid columns={[1, "1fr 2fr", "1fr 2fr"]} gap={2}>
+      <Grid columns={[1, "2fr 3fr", "2fr 3fr"]} gap={3}>
         {sidePanel && <Card>{sidePanel}</Card>}
         {mainContent && (
           <Card>

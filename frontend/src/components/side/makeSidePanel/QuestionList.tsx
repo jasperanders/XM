@@ -28,7 +28,7 @@ const QuestionList = () => {
         );
       })}
       <Button onclick={() => console.log("Dispatch set currentQuestion Null")}>
-        New Question
+        New
       </Button>
     </Styled.table>
   );
