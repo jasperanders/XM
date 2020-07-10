@@ -13,6 +13,7 @@ const dataSchema = new Schema(
       timeStart: Date,
       timeEnd: Date,
       timeExpired: Boolean,
+      master: Boolean,
     },
     author: {
       type: "ObjectId",

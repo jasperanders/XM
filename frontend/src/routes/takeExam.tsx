@@ -1,7 +1,7 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
-import Question from "../components/question/Question";
+import Question from "../components/askQuestion/Question";
 import { TRootState } from "../types/examTypes";
 import Layout from "../components/layout/Layout";
 import ExamProgress from "../components/head/ExamProgress";

@@ -1,4 +1,7 @@
 // example base theme from @theme-ui/presets
+
+const primaryBorder = "2px solid #07c";
+
 export default {
   breakpoints: ["40em", "52em", "64em"],
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
@@ -25,7 +28,7 @@ export default {
     secondary: "#30c",
     muted: "#f6f6f6",
     light: " #E8F4FF",
-    inactive: "#95a5a6",
+    inactive: "#AFC5CB",
     active: "#e74c3c",
   },
   text: {
@@ -87,8 +90,13 @@ export default {
       borderBottomStyle: "solid",
     },
     td: {
+      padding: "0.5rem",
       textAlign: "left",
-      borderBottomStyle: "solid",
+      borderBottomStyle: "1px solid black",
+    },
+    tr: {
+      odd: {},
+      ":hover": { backgroundColor: "#ddd" },
     },
     progress: {
       color: "primary",
@@ -120,6 +128,13 @@ export default {
       border: "1px solid",
       borderColor: "muted",
     },
+    blueBorder: {
+      padding: "1rem",
+      border: primaryBorder,
+      borderRadius: 2,
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+    },
   },
   forms: {
     textarea: {
@@ -136,6 +151,17 @@ export default {
     primary: {
       marginTop: "1rem",
       marginBottom: "1rem",
+    },
+    activeTab: {
+      marginTop: "1rem",
+      borderBottomLeftRadius: 0,
+      borderBottomRightRadius: 0,
+    },
+    mutedTab: {
+      backgroundColor: "inactive",
+      marginTop: "1rem",
+      borderBottomLeftRadius: 0,
+      borderBottomRightRadius: 0,
     },
   },
 };
