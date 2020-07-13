@@ -21,3 +21,8 @@ export interface TCountDownAppTimer {
 export interface TNextQuestionPayload {
   currentExam: TExam;
 }
+
+export interface TSetCurrentQuestionId {
+  newQuestionId: String;
+  newQuestionIndex: number | null | undefined;
+}

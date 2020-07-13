@@ -184,7 +184,8 @@ export const initialAnswerBodyMultipleChoiceTable: TAnswerBodyMultipleChoiceTabl
 export const initialExamState: TExamState = {
   currentExamId: exam_01.examId,
   currentQuestionIndex: 0,
-  currentQuestionId: exam_01.questionsById[0],
+  currentQuestionId: null,
+  // currentQuestionId: exam_01.questionsById[0],
   currentTime: null,
   timerIsActive: true,
   examFinished: false,

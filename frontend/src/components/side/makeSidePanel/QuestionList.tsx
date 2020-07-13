@@ -1,10 +1,13 @@
 import React from "react";
 import { Styled, Button } from "theme-ui";
 import { TRootState } from "../../../types/examTypes";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setCurrentQuestionId } from "../../../redux/actions";
 
 const QuestionList = () => {
   const questions = useSelector((state: TRootState) => state.questionTable);
+
+  const dispatch = useDispatch();
 
   return (
     <Styled.table>
@@ -18,7 +21,12 @@ const QuestionList = () => {
               <Button
                 variant="tiny"
                 onClick={() => {
-                  console.log("dispatch set current question");
+                  dispatch(
+                    setCurrentQuestionId({
+                      newQuestionId: id,
+                      newQuestionIndex: null,
+                    })
+                  );
                 }}
               >
                 Edit
@@ -27,8 +35,17 @@ const QuestionList = () => {
           </Styled.tr>
         );
       })}
-      <Button onclick={() => console.log("Dispatch set currentQuestion Null")}>
-        New
+      <Button
+        onClick={() =>
+          dispatch(
+            setCurrentQuestionId({
+              newQuestionId: null,
+              newQuestionIndex: null,
+            })
+          )
+        }
+      >
+        New question
       </Button>
     </Styled.table>
   );

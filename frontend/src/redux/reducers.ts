@@ -8,6 +8,7 @@ import {
   NEXT_QUESTION,
   SET_APP_TIMER,
   COUNT_DOWN_APP_TIMER,
+  SET_CURRENT_QUESTION_ID,
 } from "./actions";
 import {
   initialAnswerTable,
@@ -73,6 +74,14 @@ function examState(state = initialExamState, { type, payload }) {
           d.examFinished = true;
         }
       });
+    case SET_CURRENT_QUESTION_ID:
+      return produce(state, (d) => {
+        d.currentQuestionId = payload.newQuestionId;
+        d.currentQuestionIndex = payload.newQuestionIndex
+          ? payload.newQuestionIndex
+          : null;
+      });
+
     default:
       return state;
   }

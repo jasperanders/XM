@@ -106,11 +106,11 @@ export interface TAnswerBodyMultipleChoiceTable {
 // =============== Exam State ====================
 
 export interface TExamState {
-  currentExamId: string;
-  currentQuestionIndex: number;
-  currentQuestionId: string;
-  currentTime: number;
-  timerIsActive: boolean;
+  currentExamId: string | null;
+  currentQuestionIndex: number | null;
+  currentQuestionId: string | null;
+  currentTime: number | null;
+  timerIsActive: boolean | null;
   examFinished: boolean;
 }
 
