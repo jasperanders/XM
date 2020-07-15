@@ -9,6 +9,7 @@ import { ThemeProvider } from "theme-ui";
 import theme from "./theme";
 import { Router } from "react-router-dom";
 import { createBrowserHistory } from "history";
+import UserContextProvider from "./services/userContext";
 
 export const history = createBrowserHistory();
 export const store = configureAppStore();
@@ -20,11 +21,13 @@ store.subscribe(() => {
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Router history={history}>
-        <ThemeProvider theme={theme}>
-          <App />
-        </ThemeProvider>
-      </Router>
+      <UserContextProvider>
+        <Router history={history}>
+          <ThemeProvider theme={theme}>
+            <App />
+          </ThemeProvider>
+        </Router>
+      </UserContextProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

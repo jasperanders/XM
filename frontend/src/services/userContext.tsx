@@ -6,14 +6,18 @@ import apiRoutes from "./apiRoutes";
 
 // Initializes the Context. This constant must be imported, wherever
 // you need to access the user context
-export const UserContext = React.createContext();
+export const UserContext = React.createContext({
+  user: {},
+  loadUser: () => {},
+  wipeUser: () => {},
+});
 
 export default function UserContextProvider({ children }) {
   const [user, setUser] = useState(false);
 
   useEffect(() => {
     loadUser();
-  }, []);
+  });
 
   /**
    * the loadUser function returns a promise, because we want to wait for the state to be set, before anything else
@@ -26,11 +30,11 @@ export default function UserContextProvider({ children }) {
    */
   const loadUser = () => {
     const authToken = storedAuthToken();
+    console.log(authToken);
     if (!user && authToken) {
-      return HttpService.get(apiRoutes.USER)
+      return HttpService.get(apiRoutes.USER, authToken)
         .then(({ data }) => {
-          this.setStatePromise(this, { user: data });
-          this.renewAutoLogout();
+          setUser(data);
         })
         .catch(() => false);
     }

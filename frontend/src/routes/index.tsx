@@ -1,4 +1,4 @@
-import React, { lazy, useState } from "react";
+import React, { lazy, useState, useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import TakeExam from "./takeExam";
 import MakeExam from "./makeExam";
@@ -8,10 +8,12 @@ import ExamProgress from "../components/head/ExamProgress";
 import { useSelector } from "react-redux";
 import { TRootState } from "../types/examTypes";
 import Login from "./login";
+import { UserContext } from "../services/userContext";
 const ExamEnd = lazy(() => importMDX("../mdx/examEnd.mdx"));
 
 export default function Routes() {
-  const [user, setUser] = useState("");
+  const { user } = useContext(UserContext);
+  console.log(user);
   const examFinished = useSelector(
     (state: TRootState) => state.examState.examFinished
   );

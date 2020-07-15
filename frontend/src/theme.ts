@@ -38,6 +38,9 @@ export default {
       lineHeight: "heading",
       fontWeight: "heading",
     },
+    warning: {
+      color: "active",
+    },
   },
   styles: {
     root: {

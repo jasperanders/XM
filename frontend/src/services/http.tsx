@@ -14,6 +14,7 @@ const REQUEST_METHOD = {
  * @class
  * @description This service class handles all REST Calls
  */
+
 class HttpServiceClass {
   service: any;
   /**
@@ -87,12 +88,9 @@ class HttpServiceClass {
    * @return {Promise<AxiosResponse<any>>}
    */
   handleRequest = (method, path, data = {}, params = {}, noCache = false) => {
-    console.log(method);
-    console.log(data);
-    console.log(`${settings.REACT_APP_API_URL}${path}?master=a`);
     return this.service
       .request({
-        url: `${settings.REACT_APP_API_URL}${path}?master=a`,
+        url: `${settings.REACT_APP_API_URL}${path}`,
         method,
         data,
         params: { ...params, ts: noCache ? Date.now() : null },
@@ -132,7 +130,7 @@ class HttpServiceClass {
    * @param {boolean} noCache is a boolean to whether add a time stamp or not
    * @return {*}
    */
-  get = (path, params, noCache) =>
+  get = (path, params = {}, noCache = false) =>
     this.handleRequest(REQUEST_METHOD.GET, path, {}, params, noCache);
 
   /**
