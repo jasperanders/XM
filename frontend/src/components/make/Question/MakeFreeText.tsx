@@ -8,7 +8,6 @@ export default function MakeFreeText({
   register,
   handleSubmit,
   getValues,
-  setCurrentAnswerAction,
   reset,
   questionId,
 }) {
@@ -27,24 +26,23 @@ export default function MakeFreeText({
 
   const dispatch = useDispatch();
   const questionTable = useSelector((state: TRootState) => state.questionTable);
-  
   /**
    * Form Hook
    */
 
   useEffect(() => {
-    if (questionId) {
+    if (questionId !== null) {
       setMakeFreeTextState({
         title: questionTable.byId[questionId].title,
         questionText: questionTable.byId[questionId].text,
         masterAnswer: "",
       });
     } else {
-      setMakeFreeTextState({
-        title: null,
-        questionText: null,
-        masterAnswer: null,
-      });
+      setMakeFreeTextState(() => ({
+        title: "",
+        questionText: "",
+        masterAnswer: "",
+      }));
     }
     reset();
   }, [questionId]);
@@ -75,13 +73,7 @@ export default function MakeFreeText({
         defaultValue={makeFreeTextState.masterAnswer}
         ref={register}
       />
-      <Button
-        sx={{ marginRight: "0.5rem" }}
-        variant="warning"
-        onClick={() => {
-          reset();
-        }}
-      >
+      <Button sx={{ marginRight: "0.5rem" }} variant="warning" onClick={reset}>
         Reset
       </Button>
       <Button type="submit">Save</Button>

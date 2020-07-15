@@ -4,16 +4,13 @@ import { useForm } from "react-hook-form";
 import MakeFreeText from "./MakeFreeText";
 import MakeMultipleChoice from "./MakeMultipleChoice";
 import { TRootState } from "../../../types/examTypes";
+import { questionTypes } from "../../../constants/constants";
 
-export default function Question() {
+export default function Question({ questionType: questionTypeProp }) {
   /**
    * React Hooks
    */
-  const [currentAnswerAction, setCurrentAnswerAction] = useState(() => {});
-  const [currentQuestionState, setCurrentQuestionState] = useState({
-    questionType: "freeText",
-    question: null,
-  });
+  const [questionType, setQuestionType] = useState("");
   /**
    * Redux
    */
@@ -32,34 +29,34 @@ export default function Question() {
    * Effects
    */
   useEffect(() => {
-    if (currentQuestionId) {
-      setCurrentQuestionState({
-        questionType: questionTable.byId[currentQuestionId].questionType,
-        question: questionTable.byId[currentQuestionId],
-      });
+    if (!currentQuestionId) {
+      setQuestionType(questionTypeProp);
+    } else {
+      console.log(questionTable.byId[currentQuestionId].questionType);
+      setQuestionType(questionTable.byId[currentQuestionId].questionType);
     }
-  }, [currentQuestionId]);
-
+  }, [currentQuestionId, questionTypeProp]);
   const questionBody = () => {
-    switch (currentQuestionState.questionType) {
-      case "freeText":
+    console.log("questionType");
+    console.log(questionType);
+    switch (questionType) {
+      case questionTypes[0].name:
         return (
           <MakeFreeText
             register={register}
             handleSubmit={handleSubmit}
             getValues={getValues}
-            setCurrentAnswerAction={setCurrentAnswerAction}
             reset={reset}
             questionId={currentQuestionId}
           />
         );
-      case "multipleChoice":
+      case questionTypes[1].name:
         return (
           <MakeMultipleChoice
             register={register}
+            questionId={currentQuestionId}
             handleSubmit={handleSubmit}
             getValues={getValues}
-            setCurrentAnswerAction={setCurrentAnswerAction}
             reset={reset}
           />
         );

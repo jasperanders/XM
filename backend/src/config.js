@@ -55,7 +55,7 @@ const config = {
         },
         servers: [
           {
-            url: "http://localhost:8080/",
+            url: "http://localhost:9000/",
           },
         ],
       },
@@ -108,5 +108,4 @@ const config = {
 };
 
 module.exports = Object.assign(config.all, config[config.all.env]);
-
 export default module.exports;

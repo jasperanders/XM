@@ -41,7 +41,7 @@ export default (apiRoot, routes) => {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   app.use(doorman);
-  app.use(acl.authorize)
+  app.use(acl.authorize);
   app.use(apiRoot, routes);
   app.use(queryErrorHandler());
   app.use(bodyErrorHandler());

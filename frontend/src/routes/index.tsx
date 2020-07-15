@@ -7,10 +7,11 @@ import { importMDX } from "mdx.macro";
 import ExamProgress from "../components/head/ExamProgress";
 import { useSelector } from "react-redux";
 import { TRootState } from "../types/examTypes";
+import Login from "./login";
 const ExamEnd = lazy(() => importMDX("../mdx/examEnd.mdx"));
 
 export default function Routes() {
-  const [user, setUser] = useState("admin");
+  const [user, setUser] = useState("");
   const examFinished = useSelector(
     (state: TRootState) => state.examState.examFinished
   );
@@ -48,7 +49,16 @@ export default function Routes() {
         </Route>
       );
     } else {
-      return <Redirect to="/login/" />;
+      return (
+        <>
+          <Route path="/login/">
+            <Login />
+          </Route>
+          <Route path="/">
+            <Redirect to="/login/" />
+          </Route>
+        </>
+      );
     }
   };
 

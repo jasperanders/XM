@@ -1,14 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Question from "./Question";
-import { TRootState } from "../../types/examTypes";
-import { useSelector } from "react-redux";
+import Tabs from "../basics/Tab";
+import { questionTypes } from "../../constants/constants";
 
 export default function Make() {
-
+  const makeQuestionCmpArr = () => {
+    const res = [];
+    questionTypes.map((qstn) => {
+      res.push(<Question questionType={qstn.name} />);
+    });
+    return res;
+  };
 
   return (
     <div>
-      <Question />
+      <Tabs tabNames={questionTypes} tabComponents={makeQuestionCmpArr()} />
     </div>
   );
 }

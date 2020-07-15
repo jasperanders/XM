@@ -4,27 +4,29 @@ import { v4 } from "uuid";
 
 import { Textarea, Button, Input, Flex, Label, Checkbox } from "theme-ui";
 import { TRootState } from "../../../types/examTypes";
+import { multipleChoiceFormName } from "../../../constants/constants";
 
 export default function MakeMultipleChoice({
   register,
   handleSubmit,
   getValues,
-  setCurrentAnswerAction,
   reset,
+  questionId,
 }) {
   /**
    * React Hooks
    */
 
-  const [possibleAnswers, setPossibleAnswers] = useState([]);
+  const [multipeChoiceState, setMultipeChoiceState] = useState({
+    title: "",
+    text: "",
+    possibleAnswers: ["", ""],
+  });
 
   /**
    * Redux Hooks
    */
   const dispatch = useDispatch();
-  const { currentQuestionId } = useSelector(
-    (state: TRootState) => state.examState
-  );
   const questionTable = useSelector((state: TRootState) => state.questionTable);
   const questionBodyMultipleChoiceTable = useSelector(
     (state: TRootState) => state.questionBodyMultipleChoiceTable
@@ -32,11 +34,6 @@ export default function MakeMultipleChoice({
 
   let question = undefined;
   let questionBody = undefined;
-
-  if (currentQuestionId) {
-    question = questionTable.byId[currentQuestionId];
-    questionBody = questionBodyMultipleChoiceTable.byId[currentQuestionId];
-  }
 
   /**
    * Form Hook
@@ -48,14 +45,24 @@ export default function MakeMultipleChoice({
    */
 
   useEffect(() => {
-    console.log("effect triggerd");
-    setPossibleAnswers(questionBody.possibleAnswers);
-  }, []);
+    if (questionId) {
+      setMultipeChoiceState({
+        title: question.title,
+        text: question.text,
+        possibleAnswers: questionBody.possibleAnswers,
+      });
+    } else {
+      setMultipeChoiceState({
+        title: "",
+        text: "",
+        possibleAnswers: ["", ""],
+      });
+    }
+  }, [questionId]);
 
   useEffect(() => {
-    console.log("reset");
     reset();
-  }, [possibleAnswers]);
+  }, [multipeChoiceState.possibleAnswers]);
 
   /**
    * Functions
@@ -64,6 +71,8 @@ export default function MakeMultipleChoice({
   const onSubmit = (data) => {
     console.log("submitted");
   };
+
+  const { possibleAnswers, title, text } = multipeChoiceState;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -77,19 +86,22 @@ export default function MakeMultipleChoice({
           ref={register}
           name={"questionTitle"}
           placeholder="Provide a Question Title here"
-          defaultValue={question ? question.title : null}
+          defaultValue={title}
         />
         <Textarea
           rows={5}
           name={"questionText"}
           placeholder={"Provide a question here."}
           ref={register}
-          defaultValue={question ? question.text : null}
+          defaultValue={text}
         />
         <Button
           sx={{ flexGrow: 0 }}
           onClick={() => {
-            setPossibleAnswers((oldArray) => [...oldArray, ""]);
+            setMultipeChoiceState((old) => ({
+              ...old,
+              possibleAnswers: [...old.possibleAnswers, ""],
+            }));
           }}
         >
           Add Answer
@@ -126,8 +138,8 @@ export default function MakeMultipleChoice({
                   sx={{ margin: "0", marginLeft: "0.5rem" }}
                   variant="warning"
                   onClick={() => {
-                    setPossibleAnswers((old) => {
-                      old.splice(index, 1);
+                    setMultipeChoiceState((old) => {
+                      old.possibleAnswers.splice(index, 1);
                       return old;
                     });
                   }}
