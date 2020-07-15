@@ -7,16 +7,20 @@ import apiRoutes from "./apiRoutes";
 // Initializes the Context. This constant must be imported, wherever
 // you need to access the user context
 export const UserContext = React.createContext({
-  user: {},
+  user: { id: null, role: null },
   loadUser: () => {},
   wipeUser: () => {},
+  setUser: (value) => {},
 });
 
 export default function UserContextProvider({ children }) {
-  const [user, setUser] = useState(false);
+  const [user, setUser] = useState({
+    id: null,
+    role: null,
+  });
 
   useEffect(() => {
-    loadUser();
+    console.log(user);
   });
 
   /**
@@ -41,7 +45,11 @@ export default function UserContextProvider({ children }) {
     return new Promise((resolve) => resolve());
   };
 
-  const wipeUser = () => setUser(false);
+  const wipeUser = () =>
+    setUser({
+      id: null,
+      role: null,
+    });
 
   return (
     // For more details on how the React Context API works, take a look at https://reactjs.org/docs/context.html
@@ -51,6 +59,7 @@ export default function UserContextProvider({ children }) {
     <UserContext.Provider
       value={{
         user,
+        setUser,
         loadUser,
         wipeUser,
       }}

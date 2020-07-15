@@ -158,7 +158,8 @@ class HttpServiceClass {
    * @param {Object} data is an object to submit to API.
    * @return {*}
    */
-  post = (path, data) => this.handleRequest(REQUEST_METHOD.POST, path, data);
+  post = (path, data, params) =>
+    this.handleRequest(REQUEST_METHOD.POST, path, data, params);
 
   /**
    * @function

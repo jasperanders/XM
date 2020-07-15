@@ -7,17 +7,17 @@ import apiRoutes from "../services/apiRoutes";
 import { UserContext } from "../services/userContext";
 
 export default function Login() {
-  const { loadUser } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
   const { register, handleSubmit, reset } = useForm();
   const [formError, setFormError] = useState("");
 
   const onSubmit = (data) => {
     console.log(data);
     const { email, password } = data;
-    HttpService.post(apiRoutes.AUTH, { email, password })
+    HttpService.post(apiRoutes.AUTH, { email, password }, { master: "a" })
       .then(({ data }) => {
         HttpService.setAuthToken(data.token, true);
-        loadUser();
+        setUser(data);
       })
       .catch((error) => {
         setFormError(error);

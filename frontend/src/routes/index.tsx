@@ -19,7 +19,7 @@ export default function Routes() {
   );
 
   const makeRoutes = () => {
-    if (user === "user") {
+    if (user.role === "user") {
       return (
         <>
           <Route exact path="/">
@@ -44,7 +44,7 @@ export default function Routes() {
           </Route>
         </>
       );
-    } else if (user === "admin") {
+    } else if (user.role === "admin") {
       return (
         <Route path="/">
           <MakeExam />
