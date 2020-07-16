@@ -5,39 +5,42 @@ import { v4 } from "uuid";
 import { Textarea, Button, Input, Flex, Label, Checkbox } from "theme-ui";
 import { TRootState } from "../../../types/examTypes";
 import { multipleChoiceFormName } from "../../../constants/constants";
+import HttpService from "../../../services/http";
+import apiRoutes from "../../../services/apiRoutes";
+import { useForm, Controller } from "react-hook-form";
 
-export default function MakeMultipleChoice({
-  register,
-  handleSubmit,
-  getValues,
-  reset,
-  questionId,
-}) {
+export default function MakeMultipleChoice({ makeQuestion, questionId }) {
   /**
    * React Hooks
    */
 
-  const [multipeChoiceState, setMultipeChoiceState] = useState({
+  const [multipleChoiceState, setMultipleChoiceState] = useState({
     title: "",
     text: "",
     possibleAnswers: ["", ""],
+    points: null,
   });
 
   /**
    * Redux Hooks
    */
-  const dispatch = useDispatch();
   const questionTable = useSelector((state: TRootState) => state.questionTable);
   const questionBodyMultipleChoiceTable = useSelector(
     (state: TRootState) => state.questionBodyMultipleChoiceTable
   );
 
-  let question = undefined;
-  let questionBody = undefined;
-
   /**
    * Form Hook
    */
+  const {
+    register,
+    handleSubmit,
+    watch,
+    errors,
+    control,
+    reset,
+    getValues,
+  } = useForm();
 
   /**
    * Effect
@@ -45,34 +48,106 @@ export default function MakeMultipleChoice({
    */
 
   useEffect(() => {
-    if (questionId) {
-      setMultipeChoiceState({
-        title: question.title,
-        text: question.text,
-        possibleAnswers: questionBody.possibleAnswers,
+    if (questionId !== null) {
+      setMultipleChoiceState({
+        title: questionTable.byId[questionId].title,
+        text: questionTable.byId[questionId].text,
+        possibleAnswers:
+          questionBodyMultipleChoiceTable.byId[questionId].possibleAnswers,
+        points: null,
       });
     } else {
-      setMultipeChoiceState({
+      setMultipleChoiceState({
         title: "",
         text: "",
         possibleAnswers: ["", ""],
+        points: null,
       });
     }
   }, [questionId]);
 
   useEffect(() => {
     reset();
-  }, [multipeChoiceState.possibleAnswers]);
+  }, [multipleChoiceState.possibleAnswers]);
 
   /**
    * Functions
    */
 
-  const onSubmit = (data) => {
-    console.log("submitted");
+  const checkedIndex = (possible, correct) => {
+    const res = [];
+    possible.map((el, idx) => {
+      el === correct[idx] ? res.push(true) : res.push(false);
+    });
+    return res;
   };
 
-  const { possibleAnswers, title, text } = multipeChoiceState;
+  const checkedSolutions = (possible, correct) => {
+    console.log(possible);
+    console.log(correct);
+
+    const res = [];
+    possible.map((el, idx) => {
+      if (correct[idx]) res.push(el);
+    });
+    return res;
+  };
+
+  const makeBody = ({ id, bodyContent }) => {
+    HttpService.post(apiRoutes.MULTIPLE_CHOICE_QUESTION, {
+      content: { questionId: id, possibleAnswers: bodyContent.possibleAnswers },
+    }).catch(() => {
+      console.log("error make body");
+    });
+  };
+
+  const makeAnswer = ({ id, answerContent }) => {
+    const answerData = { questionId: id, master: true };
+    const answerBody = {
+      questionId: id,
+      answers: answerContent.selectedAnswers,
+    };
+    console.log(answerBody);
+    HttpService.post(apiRoutes.ANSWER, { content: answerData })
+      .then(({ data }) => {
+        HttpService.post(apiRoutes.MULTIPLE_CHOICE_ANSWER, {
+          content: {
+            answerId: data.id,
+            ...answerBody,
+          },
+        }).catch(() => {
+          console.log("error make answer body");
+        });
+      })
+      .catch(() => {
+        console.log("error make answer");
+      });
+  };
+
+  const onSubmit = (data) => {
+    console.log(data);
+    const selectedAnswers = checkedSolutions(
+      data.multipleChoiceAnswerText,
+      data.multipleChoiceAnswer
+    );
+    console.log(selectedAnswers);
+    const questionData = {
+      timeLimitMs: 50000,
+      questionType: "multipleChoice",
+      title: data.questionTitle,
+      text: data.questionText,
+      points: data.questionPoints,
+    };
+    makeQuestion({
+      questionContent: questionData,
+      bodyContent: { possibleAnswers: data.multipleChoiceAnswerText },
+      makeBody,
+      answerContent: { selectedAnswers },
+      makeAnswer,
+    });
+  };
+
+  const { possibleAnswers, title, text } = multipleChoiceState;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -98,7 +173,7 @@ export default function MakeMultipleChoice({
         <Button
           sx={{ flexGrow: 0 }}
           onClick={() => {
-            setMultipeChoiceState((old) => ({
+            setMultipleChoiceState((old) => ({
               ...old,
               possibleAnswers: [...old.possibleAnswers, ""],
             }));
@@ -121,15 +196,16 @@ export default function MakeMultipleChoice({
               >
                 <Label>
                   {/* <Controller as={Checkbox} name={multipleChoiceFormName} /> */}
-                  <Checkbox
+                  <Controller
                     sx={{ marginTop: "0.5rem" }}
-                    defaultChecked={false}
-                    name={`multipleChoiceAnswer_[${index}]`}
-                    ref={register}
+                    as={Checkbox}
+                    name={`multipleChoiceAnswer[${index}]`}
+                    control={control}
+                    defaultValue={false}
                   />
                   <Input
                     ref={register}
-                    name={`multipleChoiceAnswerText_[${index}]`}
+                    name={`multipleChoiceAnswerText[${index}]`}
                     placeholder="Provide an Answer"
                     defaultValue={possibleAnswer ? possibleAnswer : null}
                   />
@@ -138,7 +214,7 @@ export default function MakeMultipleChoice({
                   sx={{ margin: "0", marginLeft: "0.5rem" }}
                   variant="warning"
                   onClick={() => {
-                    setMultipeChoiceState((old) => {
+                    setMultipleChoiceState((old) => {
                       old.possibleAnswers.splice(index, 1);
                       return old;
                     });
@@ -150,6 +226,14 @@ export default function MakeMultipleChoice({
             </div>
           );
         })}
+        <Input
+          sx={{ marginTop: "0.5rem", maxWidth: "20%" }}
+          ref={register}
+          name={"questionPoints"}
+          type="number"
+          placeholder="Points"
+          defaultValue={multipleChoiceState.points}
+        />
         <Flex>
           <Button
             sx={{ marginRight: "0.5rem" }}

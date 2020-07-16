@@ -29,7 +29,7 @@ const QuestionList = () => {
                   );
                 }}
               >
-                Edit
+                Show
               </Button>
             </Styled.td>
           </Styled.tr>

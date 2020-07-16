@@ -88,12 +88,16 @@ class HttpServiceClass {
    * @return {Promise<AxiosResponse<any>>}
    */
   handleRequest = (method, path, data = {}, params = {}, noCache = false) => {
+    const authToken = storedAuthToken();
     return this.service
       .request({
         url: `${settings.REACT_APP_API_URL}${path}`,
         method,
         data,
-        params: { ...params, ts: noCache ? Date.now() : null },
+        params: { ...params, master: "a", ts: noCache ? Date.now() : null },
+        headers: {
+          Authorization: authToken ? `Bearer ${authToken}` : undefined,
+        },
       })
       .catch(this.handleError);
   };
@@ -158,8 +162,7 @@ class HttpServiceClass {
    * @param {Object} data is an object to submit to API.
    * @return {*}
    */
-  post = (path, data, params) =>
-    this.handleRequest(REQUEST_METHOD.POST, path, data, params);
+  post = (path, data) => this.handleRequest(REQUEST_METHOD.POST, path, data);
 
   /**
    * @function

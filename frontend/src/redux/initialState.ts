@@ -21,7 +21,7 @@ import {
 const question_01: TQuestion = {
   questionId: v4(),
   questionType: "freeText",
-  timeLimitMs: 4000,
+  timeLimitMs: 40000,
   title: "That is the Question",
   text: "What does the Fox say?",
 };
@@ -50,7 +50,7 @@ const answer_01_body: TAnswerBodyFreeText = {
 const question_02: TQuestion = {
   questionId: v4(),
   questionType: "freeText",
-  timeLimitMs: 5000,
+  timeLimitMs: 50000,
   title: "Even better Question",
   text: "How many roads must a man walk down?",
 };
@@ -80,7 +80,7 @@ const answer_02_body: TAnswerBodyFreeText = {
 const question_03: TQuestion = {
   questionId: v4(),
   questionType: "multipleChoice",
-  timeLimitMs: 6000,
+  timeLimitMs: 60000,
   title: "Your choice",
   text: "Yes or No?",
 };

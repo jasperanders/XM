@@ -5,12 +5,18 @@ import MakeFreeText from "./MakeFreeText";
 import MakeMultipleChoice from "./MakeMultipleChoice";
 import { TRootState } from "../../../types/examTypes";
 import { questionTypes } from "../../../constants/constants";
+import HttpService from "../../../services/http";
+import apiRoutes from "../../../services/apiRoutes";
 
 export default function Question({ questionType: questionTypeProp }) {
   /**
    * React Hooks
    */
-  const [questionType, setQuestionType] = useState("");
+  const [makeQuestionState, setMakeQuestionState] = useState({
+    questionId: null,
+    questionType: null,
+  });
+  const [questionBody, setQuestionBody] = useState(<></>);
   /**
    * Redux
    */
@@ -23,46 +29,67 @@ export default function Question({ questionType: questionTypeProp }) {
    * Hook Form
    */
 
-  const { register, handleSubmit, watch, errors, reset, getValues } = useForm();
 
   /**
    * Effects
    */
   useEffect(() => {
     if (!currentQuestionId) {
-      setQuestionType(questionTypeProp);
+      setMakeQuestionState((oldState) => ({
+        ...oldState,
+        questionType: questionTypeProp,
+      }));
     } else {
-      console.log(questionTable.byId[currentQuestionId].questionType);
-      setQuestionType(questionTable.byId[currentQuestionId].questionType);
+      setMakeQuestionState({
+        questionId: currentQuestionId,
+        questionType: questionTable.byId[currentQuestionId].questionType,
+      });
     }
   }, [currentQuestionId, questionTypeProp]);
-  const questionBody = () => {
-    console.log("questionType");
+
+  useEffect(() => {
+    const { questionType } = makeQuestionState;
+    console.log("using questionType");
     console.log(questionType);
     switch (questionType) {
       case questionTypes[0].name:
-        return (
+        setQuestionBody(
           <MakeFreeText
-            register={register}
-            handleSubmit={handleSubmit}
-            getValues={getValues}
-            reset={reset}
+            makeQuestion={makeQuestion}
             questionId={currentQuestionId}
           />
         );
+        break;
       case questionTypes[1].name:
-        return (
+        setQuestionBody(
           <MakeMultipleChoice
-            register={register}
+            makeQuestion={makeQuestion}
             questionId={currentQuestionId}
-            handleSubmit={handleSubmit}
-            getValues={getValues}
-            reset={reset}
           />
         );
+        break;
       default:
-        return <div>Something went wrong</div>;
+        setQuestionBody(<div>Something went wrong</div>);
+        break;
     }
+  }, [makeQuestionState]);
+
+  const makeQuestion = ({
+    questionContent,
+    bodyContent,
+    makeBody,
+    answerContent,
+    makeAnswer,
+  }) => {
+    HttpService.post(apiRoutes.QUESTION, { content: questionContent })
+      .then(({ data }) => {
+        makeBody({ id: data.id, bodyContent });
+        makeAnswer({ id: data.id, answerContent });
+      })
+      .catch((error) => {
+        console.log("error make Question");
+      });
   };
-  return <div>{questionBody()}</div>;
+
+  return <div>{questionBody}</div>;
 }

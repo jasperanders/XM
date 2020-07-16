@@ -21,7 +21,8 @@ export default function UserContextProvider({ children }) {
 
   useEffect(() => {
     console.log(user);
-  });
+    loadUser();
+  }, []);
 
   /**
    * the loadUser function returns a promise, because we want to wait for the state to be set, before anything else
@@ -35,8 +36,8 @@ export default function UserContextProvider({ children }) {
   const loadUser = () => {
     const authToken = storedAuthToken();
     console.log(authToken);
-    if (!user && authToken) {
-      return HttpService.get(apiRoutes.USER, authToken)
+    if (!user.id && authToken) {
+      return HttpService.get(apiRoutes.USER_ME, authToken)
         .then(({ data }) => {
           setUser(data);
         })
@@ -65,6 +66,7 @@ export default function UserContextProvider({ children }) {
       }}
     >
       {children}
+      <button onClick={wipeUser}>Logout</button>
     </UserContext.Provider>
   );
 }

@@ -48,6 +48,7 @@ export default function FreeTexTFreeTextQuestion({
     const payload = { questionId, answer };
     dispatch(answerFreeTextQuestion(payload));
     dispatch(nextQuestion({ currentExam: currentExam.byId[currentExamId] }));
+    
   };
 
   return (

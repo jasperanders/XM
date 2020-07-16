@@ -9,8 +9,9 @@ import userAcl from "a/user/acl";
 const dataSchema = new Schema(
   {
     content: {
+      answerId: String,
       questionId: String,
-      selectedAnswers: [String],
+      answers: [String],
     },
     author: {
       type: "ObjectId",

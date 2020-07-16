@@ -14,7 +14,7 @@ export default function Login() {
   const onSubmit = (data) => {
     console.log(data);
     const { email, password } = data;
-    HttpService.post(apiRoutes.AUTH, { email, password }, { master: "a" })
+    HttpService.post(apiRoutes.AUTH, { email, password })
       .then(({ data }) => {
         HttpService.setAuthToken(data.token, true);
         setUser(data);

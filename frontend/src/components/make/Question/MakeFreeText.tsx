@@ -3,14 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Textarea, Button, Input, Grid } from "theme-ui";
 import { TRootState } from "../../../types/examTypes";
+import HttpService from "../../../services/http";
+import apiRoutes from "../../../services/apiRoutes";
+import { useForm } from "react-hook-form";
 
-export default function MakeFreeText({
-  register,
-  handleSubmit,
-  getValues,
-  reset,
-  questionId,
-}) {
+export default function MakeFreeText({ makeQuestion, questionId }) {
   /**
    * React Hooks
    */
@@ -18,6 +15,7 @@ export default function MakeFreeText({
     title: null,
     questionText: null,
     masterAnswer: null,
+    points: null,
   });
 
   /**
@@ -29,6 +27,7 @@ export default function MakeFreeText({
   /**
    * Form Hook
    */
+  const { register, handleSubmit, watch, errors, reset, getValues } = useForm();
 
   useEffect(() => {
     if (questionId !== null) {
@@ -36,19 +35,63 @@ export default function MakeFreeText({
         title: questionTable.byId[questionId].title,
         questionText: questionTable.byId[questionId].text,
         masterAnswer: "",
+        points: 0,
       });
     } else {
       setMakeFreeTextState(() => ({
         title: "",
         questionText: "",
         masterAnswer: "",
+        points: null,
       }));
     }
     reset();
   }, [questionId]);
 
-  const onSubmit = () => {
+  const makeBody = ({ id, bodyContent }) => {
+    HttpService.post(apiRoutes.FREE_TEXT_QUESTION, {
+      content: { questionId: id },
+    }).catch(() => {
+      console.log("error make body");
+    });
+  };
+
+  const makeAnswer = ({ id, answerContent }) => {
+    const answerData = { questionId: id, master: true };
+    const answerBody = { questionId: id, answerText: answerContent.text };
+    HttpService.post(apiRoutes.ANSWER, { content: answerData })
+      .then(({ data }) => {
+        HttpService.post(apiRoutes.FREE_TEXT_ANSWER, {
+          content: {
+            answerId: data.id,
+            ...answerBody,
+          },
+        }).catch(() => {
+          console.log("error make answer body");
+        });
+      })
+      .catch(() => {
+        console.log("error make answer");
+      });
+  };
+
+  const onSubmit = (data) => {
     console.log("submitted");
+    console.log(data);
+    const questionData = {
+      timeLimitMs: 50000,
+      questionType: "freeText",
+      title: data.questionTitle,
+      text: data.questionText,
+      points: data.questionPoints,
+    };
+    makeQuestion({
+      questionContent: questionData,
+      bodyContent: {},
+      makeBody,
+      answerContent: { text: data.masterAnswer },
+      makeAnswer,
+    });
   };
 
   return (
@@ -72,6 +115,13 @@ export default function MakeFreeText({
         placeholder={"Provide master Answer here"}
         defaultValue={makeFreeTextState.masterAnswer}
         ref={register}
+      />
+      <Input
+        ref={register}
+        name={"questionPoints"}
+        type="number"
+        placeholder="Points"
+        defaultValue={makeFreeTextState.points}
       />
       <Button sx={{ marginRight: "0.5rem" }} variant="warning" onClick={reset}>
         Reset
