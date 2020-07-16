@@ -11,6 +11,7 @@ const dataSchema = new Schema(
     content: {
       name: String,
       questionsById: [String],
+      examUsers: [String],
     },
     author: {
       type: "ObjectId",

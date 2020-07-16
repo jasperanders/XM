@@ -46,11 +46,13 @@ export default function UserContextProvider({ children }) {
     return new Promise((resolve) => resolve());
   };
 
-  const wipeUser = () =>
+  const wipeUser = () => {
+    HttpService.removeAuthToken();
     setUser({
       id: null,
       role: null,
     });
+  };
 
   return (
     // For more details on how the React Context API works, take a look at https://reactjs.org/docs/context.html

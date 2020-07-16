@@ -216,7 +216,7 @@ export default function MakeMultipleChoice({ makeQuestion, questionId }) {
                   onClick={() => {
                     setMultipleChoiceState((old) => {
                       old.possibleAnswers.splice(index, 1);
-                      return old;
+                    return old;
                     });
                   }}
                 >

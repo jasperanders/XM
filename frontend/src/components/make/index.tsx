@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import Question from "./Question";
 import Tabs from "../basics/Tab";
 import { questionTypes } from "../../constants/constants";
+import Exam from "./Exam";
 
 export default function Make() {
+  const [mode, setMode] = useState("exam");
   const makeQuestionCmpArr = () => {
     const res = [];
     questionTypes.map((qstn) => {
@@ -14,7 +16,11 @@ export default function Make() {
 
   return (
     <div>
-      <Tabs tabNames={questionTypes} tabComponents={makeQuestionCmpArr()} />
+      {mode === "question" ? (
+        <Tabs tabNames={questionTypes} tabComponents={makeQuestionCmpArr()} />
+      ) : (
+        <Exam />
+      )}
     </div>
   );
 }
