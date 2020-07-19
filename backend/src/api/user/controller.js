@@ -46,7 +46,6 @@ export const create = async (
   res,
   next
 ) => {
-  console.log(body);
   try {
     if ((await User.findOne({ email: body.email })) !== null) {
       res

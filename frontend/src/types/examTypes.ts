@@ -2,10 +2,10 @@
 
 export interface TQuestion {
   questionId: string;
-  timeLimitMs: number;
   questionType: "freeText" | "multipleChoice";
-  title: string;
   text: string;
+  timeLimitMs: number;
+  title: string;
 }
 
 export interface TQuestionBodyFreeText {
@@ -29,14 +29,12 @@ export interface TAnswer {
 }
 
 export interface TAnswerBodyFreeText {
-  answerBodyId: string;
   questionId: string;
   answerId: string;
   answerText: string;
 }
 
 export interface TAnswerBodyMultipleChoice {
-  answerBodyId: string;
   questionId: string;
   answerId: string;
   selectedAnswers: Array<string>;

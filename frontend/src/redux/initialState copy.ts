@@ -117,48 +117,72 @@ const exam_01: TExam = {
 // =============== tables ================
 
 export const initialQuestionTable: TQuestionTable = {
-  byId: {},
-  allIds: [],
+  byId: {
+    [question_01.questionId]: question_01,
+    [question_02.questionId]: question_02,
+    [question_03.questionId]: question_03,
+  },
+  allIds: [
+    question_01.questionId,
+    question_02.questionId,
+    question_03.questionId,
+  ],
 };
 
 export const initialAnswerTable: TAnswerTable = {
-  byId: {},
-  allIds: [],
+  byId: {
+    [answer_01.questionId]: answer_01,
+    [answer_02.questionId]: answer_02,
+    [answer_03.questionId]: answer_03,
+  },
+  allIds: [answer_01.questionId, answer_02.questionId, answer_03.questionId],
 };
 
 export const initialExamTable: TExamTable = {
-  byId: {},
-  allIds: [],
+  byId: {
+    [exam_01.examId]: exam_01,
+  },
+  allIds: [exam_01.examId],
 };
 
 // ================ Body Table ===================
 export const initialQuestionBodyFreeTextTable: TQuestionBodyFreeTextTable = {
-  byId: {},
-  allIds: [],
+  byId: {
+    [question_01_body.questionId]: question_01_body,
+    [question_02_body.questionId]: question_02_body,
+  },
+  allIds: [question_01_body.questionId, question_02_body.questionId],
 };
 
 export const initialQuestionBodyMultipleChoiceTable: TQuestionBodyMultipleChoiceTable = {
-  byId: {},
-  allIds: [],
+  byId: {
+    [question_03_body.questionId]: question_03_body,
+  },
+  allIds: [question_03_body.questionId],
 };
 
 export const initialAnswerBodyFreeTextTable: TAnswerBodyFreeTextTable = {
-  byId: {},
-  allIds: [],
+  byId: {
+    [answer_01_body.questionId]: answer_01_body,
+    [answer_02_body.questionId]: answer_02_body,
+  },
+  allIds: [answer_01_body.questionId, answer_01_body.questionId],
 };
 
 export const initialAnswerBodyMultipleChoiceTable: TAnswerBodyMultipleChoiceTable = {
-  byId: {},
-  allIds: [],
+  byId: {
+    [answer_03_body.questionId]: answer_03_body,
+  },
+  allIds: [answer_03_body.questionId],
 };
 
 // =============== Exam State ====================
 
 export const initialExamState: TExamState = {
-  currentExamId: null,
-  currentQuestionIndex: null,
+  currentExamId: exam_01.examId,
+  currentQuestionIndex: 0,
   // currentQuestionId: null,
-  currentQuestionId: null,
+  currentQuestionId: exam_01.questionsById[0],
   currentTime: null,
   timerIsActive: true,
   examFinished: false,

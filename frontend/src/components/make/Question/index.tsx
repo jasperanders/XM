@@ -49,8 +49,6 @@ export default function Question({ questionType: questionTypeProp }) {
 
   useEffect(() => {
     const { questionType } = makeQuestionState;
-    console.log("using questionType");
-    console.log(questionType);
     switch (questionType) {
       case questionTypes[0].name:
         setQuestionBody(
@@ -87,7 +85,7 @@ export default function Question({ questionType: questionTypeProp }) {
         makeAnswer({ id: data.id, answerContent });
       })
       .catch((error) => {
-        console.log("error make Question");
+        console.error("error make Question");
       });
   };
 

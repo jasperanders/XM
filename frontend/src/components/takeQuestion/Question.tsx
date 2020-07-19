@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import FreeTextQuestion from "./questionType/FreeTextQuestion";
@@ -8,6 +8,7 @@ import { Heading } from "theme-ui";
 
 import Timer from "../timer/Timer"; //!Important
 import { setAnswerStartTime } from "../../redux/actions";
+import { UserContext } from "../../services/userContext";
 
 export default function Question({ question }: TProps) {
   const [currentAnswerAction, setCurrentAnswerAction] = useState(() => {});

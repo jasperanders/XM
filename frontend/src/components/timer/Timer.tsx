@@ -23,11 +23,11 @@ export default function Timer({
 
   const { timeStart } = answer;
   const { timeLimitMs } = question;
-  const now = Date.now();
 
   const [timeLeft, setTimeLeft] = useState(
-    (timeStart ? Math.round(timeLimitMs - (now - timeStart)) : timeLimitMs) /
-      1000
+    (timeStart
+      ? Math.round(timeLimitMs - (Date.now() - timeStart))
+      : timeLimitMs) / 1000
   );
 
   useEffect(() => {
@@ -43,8 +43,9 @@ export default function Timer({
         if (newTimeLeft > -1) {
           setTimeLeft(newTimeLeft);
         } else {
+          console.log(questionId);
           dispatch(answerQuestionAction());
-          dispatch(nextQuestion({ currentExam }));
+          // dispatch(nextQuestion({ currentExam }));
           clearInterval(interval);
         }
       }, 1000);

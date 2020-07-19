@@ -21,15 +21,19 @@ export default function MultipleChoiceQuestion({
    * Redux hooks
    */
   const dispatch = useDispatch();
+  const [questionState, setQuestionState] = useState({
+    possibleAnswers: [],
+  });
 
-  const questionBody = useSelector(
-    (state: TRootState) =>
-      state.questionBodyMultipleChoiceTable.byId[question.questionId]
+  const questionBodyTable = useSelector(
+    (state: TRootState) => state.questionBodyMultipleChoiceTable
   );
 
   const currentExam = useSelector((state: TRootState) => state.examTable);
 
-  const { currentExamId } = useSelector((state: TRootState) => state.examState);
+  const { currentExamId, currentQuestionId } = useSelector(
+    (state: TRootState) => state.examState
+  );
 
   /**
    * miscellaneous functions
@@ -38,14 +42,11 @@ export default function MultipleChoiceQuestion({
   const makeSelectedAnswers = (data) => {
     const { multipleChoice } = data;
     let selectedAnswers = [];
-    possibleAnswers.forEach((el, i) => {
-      console.log(multipleChoice[i]);
-      console.log(el);
+    questionState.possibleAnswers.forEach((el, i) => {
       if (data.multipleChoice[i]) {
         selectedAnswers.push(el);
       }
     });
-    console.log(selectedAnswers);
     return selectedAnswers;
   };
 
@@ -54,16 +55,23 @@ export default function MultipleChoiceQuestion({
    */
 
   useEffect(() => {
+    console.log(questionBodyTable);
+    console.log(question);
     setCurrentAnswerAction(() => {
       return () => {
         // {nested: true} returns values as if they were submitted
         const selectedAnswers = makeSelectedAnswers(getValues({ nest: true }));
-        console.log(selectedAnswers);
-        console.log("selectedAnswers");
         return answerMultipleChoiceQuestion({
-          questionId,
+          questionId: question.questionId,
           selectedAnswers,
         });
+      };
+    });
+    setQuestionState((old) => {
+      return {
+        ...old,
+        possibleAnswers:
+          questionBodyTable.byId[question.questionId].possibleAnswers,
       };
     });
   }, [question]);
@@ -71,23 +79,20 @@ export default function MultipleChoiceQuestion({
   /**
    * Destructuring
    */
-
-  const { possibleAnswers, questionId } = questionBody;
-
   const onSubmit = (data) => {
     const selectedAnswers = makeSelectedAnswers(data);
     dispatch(
       answerMultipleChoiceQuestion({
-        questionId: questionId,
+        questionId: question.questionId,
         selectedAnswers,
       })
     );
-    dispatch(setAnswerEndTime({ questionId: questionId }));
+    dispatch(setAnswerEndTime({ questionId: question.questionId }));
     dispatch(nextQuestion({ currentExam: currentExam.byId[currentExamId] }));
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {possibleAnswers.map((possibleAnswer, index) => {
+      {questionState.possibleAnswers.map((possibleAnswer, index) => {
         return (
           <div key={v4()}>
             <Label>

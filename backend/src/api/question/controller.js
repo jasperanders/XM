@@ -48,7 +48,6 @@ export const create = async (
 ) => {
   try {
     const data = await Data.create(body);
-    console.log(data);
     res.status(CREATED).json(data);
   } catch (error) {
     errorHandler(res, error);

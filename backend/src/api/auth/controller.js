@@ -28,7 +28,6 @@ export const authenticate = async (
   res,
   next
 ) => {
-  console.log(email, password);
   // Pass value
   try {
     // Find user

@@ -16,6 +16,20 @@ export const SET_APP_TIMER = "SET_APP_TIMER";
 export const COUNT_DOWN_APP_TIMER = "COUNT_DOWN_APP_TIMER";
 export const SET_CURRENT_QUESTION_ID = "SET_CURRENT_QUESTION_ID";
 
+export const SET_ANSWER_TABLE = "SET_ANSWER_TABLE";
+export const SET_QUESTION_TABLE = "SET_QUESTION_TABLE";
+export const SET_EXAM_TABLE = "SET_EXAM_TABLE";
+export const SET_EXAM_STATE = "SET_EXAM_STATE";
+
+export const SET_QUESTION_BODY_MULTIPLE_CHOICE_TABLE =
+  "SET_QUESTION_BODY_MULTIPLE_CHOICE_TABLE";
+export const SET_ANSWER_BODY_MULTIPLE_CHOICE_TABLE =
+  "SET_ANSWER_BODY_MULTIPLE_CHOICE_TABLE";
+export const SET_QUESTION_BODY_FREE_TEXT_TABLE =
+  "SET_QUESTION_BODY_FREE_TEXT_TABLE";
+export const SET_ANSWER_BODY_FREE_TEXT_TABLE =
+  "SET_ANSWER_BODY_FREE_TEXT_TABLE";
+
 export function answerFreeTextQuestion(payload: TAnswerFreeTextPayload) {
   return { type: ANSWER_FREE_TEXT_QUESTION, payload };
 }
@@ -48,4 +62,33 @@ export function countDownAppTimer(payload) {
 
 export function setCurrentQuestionId(payload: TSetCurrentQuestionId) {
   return { type: SET_CURRENT_QUESTION_ID, payload };
+}
+
+/**
+ * Whole table actions
+ */
+export function setAnswerTable(payload) {
+  return { type: SET_ANSWER_TABLE, payload };
+}
+export function setQuestionTable(payload) {
+  return { type: SET_QUESTION_TABLE, payload };
+}
+export function setExamTable(payload) {
+  return { type: SET_EXAM_TABLE, payload };
+}
+export function setExamState(payload) {
+  return { type: SET_EXAM_STATE, payload };
+}
+
+export function setQuestionBodyFreeTextTable(payload) {
+  return { type: SET_QUESTION_BODY_FREE_TEXT_TABLE, payload };
+}
+export function setQuestionBodyMultipleChoiceTable(payload) {
+  return { type: SET_QUESTION_BODY_MULTIPLE_CHOICE_TABLE, payload };
+}
+export function setAnswerBodyFreeTextTable(payload) {
+  return { type: SET_ANSWER_BODY_FREE_TEXT_TABLE, payload };
+}
+export function setAnswerBodyMultipleChoiceTable(payload) {
+  return { type: SET_ANSWER_BODY_MULTIPLE_CHOICE_TABLE, payload };
 }

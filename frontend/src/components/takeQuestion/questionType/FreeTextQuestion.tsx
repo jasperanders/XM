@@ -31,8 +31,6 @@ export default function FreeTexTFreeTextQuestion({
         // {nested: true} returns values as if they were submitted
         const answer = getValues({ nest: true })[freeTextFormName];
 
-        console.log(answer);
-        console.log("selectedAnswers");
         return answerFreeTextQuestion({
           questionId: questionId,
           answer,
@@ -48,7 +46,6 @@ export default function FreeTexTFreeTextQuestion({
     const payload = { questionId, answer };
     dispatch(answerFreeTextQuestion(payload));
     dispatch(nextQuestion({ currentExam: currentExam.byId[currentExamId] }));
-    
   };
 
   return (

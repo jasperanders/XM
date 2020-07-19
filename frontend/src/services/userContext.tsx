@@ -7,7 +7,7 @@ import apiRoutes from "./apiRoutes";
 // Initializes the Context. This constant must be imported, wherever
 // you need to access the user context
 export const UserContext = React.createContext({
-  user: { id: null, role: null },
+  user: { _id: null, role: null },
   loadUser: () => {},
   wipeUser: () => {},
   setUser: (value) => {},
@@ -15,12 +15,11 @@ export const UserContext = React.createContext({
 
 export default function UserContextProvider({ children }) {
   const [user, setUser] = useState({
-    id: null,
+    _id: null,
     role: null,
   });
 
   useEffect(() => {
-    console.log(user);
     loadUser();
   }, []);
 
@@ -35,11 +34,11 @@ export default function UserContextProvider({ children }) {
    */
   const loadUser = () => {
     const authToken = storedAuthToken();
-    console.log(authToken);
-    if (!user.id && authToken) {
+    if (!user._id && authToken) {
       return HttpService.get(apiRoutes.USER_ME, authToken)
         .then(({ data }) => {
-          setUser(data);
+          console.log("data is", data);
+            setUser(data);
         })
         .catch(() => false);
     }
@@ -49,7 +48,7 @@ export default function UserContextProvider({ children }) {
   const wipeUser = () => {
     HttpService.removeAuthToken();
     setUser({
-      id: null,
+      _id: null,
       role: null,
     });
   };

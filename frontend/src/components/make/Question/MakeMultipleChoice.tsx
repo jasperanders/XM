@@ -83,9 +83,6 @@ export default function MakeMultipleChoice({ makeQuestion, questionId }) {
   };
 
   const checkedSolutions = (possible, correct) => {
-    console.log(possible);
-    console.log(correct);
-
     const res = [];
     possible.map((el, idx) => {
       if (correct[idx]) res.push(el);
@@ -97,7 +94,7 @@ export default function MakeMultipleChoice({ makeQuestion, questionId }) {
     HttpService.post(apiRoutes.MULTIPLE_CHOICE_QUESTION, {
       content: { questionId: id, possibleAnswers: bodyContent.possibleAnswers },
     }).catch(() => {
-      console.log("error make body");
+      console.error("error make body");
     });
   };
 
@@ -107,7 +104,6 @@ export default function MakeMultipleChoice({ makeQuestion, questionId }) {
       questionId: id,
       answers: answerContent.selectedAnswers,
     };
-    console.log(answerBody);
     HttpService.post(apiRoutes.ANSWER, { content: answerData })
       .then(({ data }) => {
         HttpService.post(apiRoutes.MULTIPLE_CHOICE_ANSWER, {
@@ -116,21 +112,19 @@ export default function MakeMultipleChoice({ makeQuestion, questionId }) {
             ...answerBody,
           },
         }).catch(() => {
-          console.log("error make answer body");
+          console.error("error make answer body");
         });
       })
       .catch(() => {
-        console.log("error make answer");
+        console.error("error make answer");
       });
   };
 
   const onSubmit = (data) => {
-    console.log(data);
     const selectedAnswers = checkedSolutions(
       data.multipleChoiceAnswerText,
       data.multipleChoiceAnswer
     );
-    console.log(selectedAnswers);
     const questionData = {
       timeLimitMs: 50000,
       questionType: "multipleChoice",
@@ -216,7 +210,7 @@ export default function MakeMultipleChoice({ makeQuestion, questionId }) {
                   onClick={() => {
                     setMultipleChoiceState((old) => {
                       old.possibleAnswers.splice(index, 1);
-                    return old;
+                      return old;
                     });
                   }}
                 >

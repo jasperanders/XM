@@ -7,11 +7,6 @@ import ExamProgress from "./components/head/ExamProgress";
 import Routes from "./routes";
 
 function App() {
-  const questions = useSelector((state: TRootState) => state.questionTable);
-  const { currentQuestionId } = useSelector(
-    (state: TRootState) => state.examState
-  );
-
   return (
     <div className="App">
       <Routes />

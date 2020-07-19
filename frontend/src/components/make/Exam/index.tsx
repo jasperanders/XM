@@ -28,7 +28,6 @@ export default function Exam() {
   };
   const addQuestion = () => {
     const newQuestion = getValues().newQuestion;
-    console.log(newQuestion);
     if (!newExamState.addedQuestions.find((el) => newQuestion === el)) {
       setNewExamState((old) => ({
         ...old,
@@ -53,7 +52,7 @@ export default function Exam() {
         questionsById: questionsById,
         examUsers: examUsers,
       },
-    }).catch((err) => console.log(err));
+    }).catch((err) => console.error(err));
   };
 
   return (
@@ -103,7 +102,7 @@ export default function Exam() {
                 );
               })}
             </Select>
-            <Button sx={{ margin: "0.5rem" }} onClick={addUser}>
+            <Button type="button" sx={{ margin: "0.5rem" }} onClick={addUser}>
               +
             </Button>
           </Flex>
@@ -135,12 +134,17 @@ export default function Exam() {
                 );
               })}
             </Select>
-            <Button sx={{ margin: "0.5rem" }} onClick={addQuestion}>
+            <Button
+              type="button"
+              sx={{ margin: "0.5rem" }}
+              onClick={addQuestion}
+            >
               +
             </Button>
           </Flex>
         </Flex>
         <Button
+          type="button"
           variant="warning"
           onClick={() => {
             setNewExamState({ addedUsers: [], addedQuestions: [] });

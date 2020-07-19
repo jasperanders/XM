@@ -9,6 +9,14 @@ import {
   SET_APP_TIMER,
   COUNT_DOWN_APP_TIMER,
   SET_CURRENT_QUESTION_ID,
+  SET_ANSWER_TABLE,
+  SET_EXAM_TABLE,
+  SET_EXAM_STATE,
+  SET_QUESTION_BODY_MULTIPLE_CHOICE_TABLE,
+  SET_QUESTION_BODY_FREE_TEXT_TABLE,
+  SET_ANSWER_BODY_MULTIPLE_CHOICE_TABLE,
+  SET_ANSWER_BODY_FREE_TEXT_TABLE,
+  SET_QUESTION_TABLE,
 } from "./actions";
 import {
   initialAnswerTable,
@@ -26,6 +34,11 @@ import { history } from "../index";
 
 function questionTable(state = initialQuestionTable, { type, payload }) {
   switch (type) {
+    case SET_QUESTION_TABLE:
+      return produce(state, (d) => {
+        d = payload.newTable;
+        return d;
+      });
     default:
       return state;
   }
@@ -33,6 +46,11 @@ function questionTable(state = initialQuestionTable, { type, payload }) {
 
 function answerTable(state = initialAnswerTable, { type, payload }) {
   switch (type) {
+    case SET_ANSWER_TABLE:
+      return produce(state, (d) => {
+        d = payload.newTable;
+        return d;
+      });
     case SET_ANSWER_START_TIME:
       return produce(state, (d) => {
         const answer = d.byId[payload.questionId];
@@ -54,6 +72,11 @@ function answerTable(state = initialAnswerTable, { type, payload }) {
 
 function examTable(state = initialExamTable, { type, payload }) {
   switch (type) {
+    case SET_EXAM_TABLE:
+      return produce(state, (d) => {
+        d = payload.newTable;
+        return d;
+      });
     default:
       return state;
   }
@@ -61,6 +84,11 @@ function examTable(state = initialExamTable, { type, payload }) {
 
 function examState(state = initialExamState, { type, payload }) {
   switch (type) {
+    case SET_EXAM_STATE:
+      return produce(state, (d) => {
+        d = payload.newTable;
+        return d;
+      });
     case NEXT_QUESTION:
       return produce(state, (d) => {
         if (
@@ -94,6 +122,11 @@ function questionBodyMultipleChoiceTable(
   { type, payload }
 ) {
   switch (type) {
+    case SET_QUESTION_BODY_MULTIPLE_CHOICE_TABLE:
+      return produce(state, (d) => {
+        d = payload.newTable;
+        return d;
+      });
     default:
       return state;
   }
@@ -104,6 +137,11 @@ function questionBodyFreeTextTable(
   { type, payload }
 ) {
   switch (type) {
+    case SET_QUESTION_BODY_FREE_TEXT_TABLE:
+      return produce(state, (d) => {
+        d = payload.newTable;
+        return d;
+      });
     default:
       return state;
   }
@@ -114,6 +152,11 @@ function answerBodyFreeTextTable(
   { type, payload }
 ) {
   switch (type) {
+    case SET_ANSWER_BODY_FREE_TEXT_TABLE:
+      return produce(state, (d) => {
+        d = payload.newTable;
+        return d;
+      });
     case ANSWER_FREE_TEXT_QUESTION:
       return produce(state, (d) => {
         const answer = d.byId[payload.questionId];
@@ -130,6 +173,11 @@ function answerBodyMultipleChoiceTable(
   { type, payload }
 ) {
   switch (type) {
+    case SET_ANSWER_BODY_MULTIPLE_CHOICE_TABLE:
+      return produce(state, (d) => {
+        d = payload.newTable;
+        return d;
+      });
     case ANSWER_MULTIPLE_CHOICE_QUESTION:
       return produce(state, (d) => {
         d.byId[payload.questionId].selectedAnswers = payload.selectedAnswers;

@@ -9,11 +9,11 @@ import userAcl from "a/user/acl";
 const dataSchema = new Schema(
   {
     content: {
-      timeLimitMs: Number,
-      questionType: String,
-      title: String,
-      text: String,
       points: Number,
+      questionType: String,
+      text: String,
+      timeLimitMs: Number,
+      title: String,
     },
     author: {
       type: "ObjectId",

@@ -13,7 +13,6 @@ const ExamEnd = lazy(() => importMDX("../mdx/examEnd.mdx"));
 
 export default function Routes() {
   const { user } = useContext(UserContext);
-  console.log(user);
   const examFinished = useSelector(
     (state: TRootState) => state.examState.examFinished
   );

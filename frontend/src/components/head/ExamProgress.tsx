@@ -9,7 +9,7 @@ export default function ExamProgress() {
     (state: TRootState) => state.examState
   );
 
-  const questionsById = exams.byId[currentExamId].questionsById;
+  const questionsById = exams?.byId[currentExamId]?.questionsById;
 
   return (
     <Flex

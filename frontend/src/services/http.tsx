@@ -108,7 +108,7 @@ class HttpServiceClass {
    * @return {*}
    */
   handleError = (error) => {
-    console.log(error);
+    console.error(error);
     if (error.response) {
       switch (error.response.status) {
         case 401:

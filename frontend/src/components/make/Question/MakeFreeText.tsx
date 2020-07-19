@@ -52,7 +52,7 @@ export default function MakeFreeText({ makeQuestion, questionId }) {
     HttpService.post(apiRoutes.FREE_TEXT_QUESTION, {
       content: { questionId: id },
     }).catch(() => {
-      console.log("error make body");
+      console.error("error make body");
     });
   };
 
@@ -67,17 +67,15 @@ export default function MakeFreeText({ makeQuestion, questionId }) {
             ...answerBody,
           },
         }).catch(() => {
-          console.log("error make answer body");
+          console.error("error make answer body");
         });
       })
       .catch(() => {
-        console.log("error make answer");
+        console.error("error make answer");
       });
   };
 
   const onSubmit = (data) => {
-    console.log("submitted");
-    console.log(data);
     const questionData = {
       timeLimitMs: 50000,
       questionType: "freeText",
