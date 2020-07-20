@@ -69,7 +69,7 @@ const config = {
   },
   test: {
     mongo: {
-      uri: "mongodb://localhost/xm-test",
+      uri: process.env.MONGODB_URI || "mongodb://localhost/xm-test",
       options: {
         debug: false,
         useCreateIndex: true,
@@ -81,7 +81,7 @@ const config = {
   },
   development: {
     mongo: {
-      uri: "mongodb://localhost/xm-dev",
+      uri: process.env.MONGODB_URI || "mongodb://localhost/xm-dev",
       options: {
         debug: true,
         useCreateIndex: true,

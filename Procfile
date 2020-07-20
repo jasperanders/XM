@@ -1,2 +1,2 @@
-web: node frontend/src/index.tsx
-api: node backend/src/server.js
+web: yarn --cwd ./frontend build
+api: yarn --cwd ./backend heroku-postbuild
