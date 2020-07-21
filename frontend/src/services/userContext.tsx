@@ -1,5 +1,4 @@
-import React, { Component, useState, createContext, useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from "react";
 
 import HttpService, { storedAuthToken } from "./http";
 import apiRoutes from "./apiRoutes";
@@ -21,7 +20,7 @@ export default function UserContextProvider({ children }) {
 
   useEffect(() => {
     loadUser();
-  }, []);
+  });
 
   /**
    * the loadUser function returns a promise, because we want to wait for the state to be set, before anything else
@@ -38,7 +37,7 @@ export default function UserContextProvider({ children }) {
       return HttpService.get(apiRoutes.USER_ME, authToken)
         .then(({ data }) => {
           console.log("data is", data);
-            setUser(data);
+          setUser(data);
         })
         .catch(() => false);
     }

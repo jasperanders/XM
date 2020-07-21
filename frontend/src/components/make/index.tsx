@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Question from "./Question";
 import Tabs from "../basics/Tab";
 import { questionTypes } from "../../constants/constants";

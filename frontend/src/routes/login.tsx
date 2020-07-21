@@ -8,7 +8,7 @@ import { UserContext } from "../services/userContext";
 
 export default function Login() {
   const { setUser } = useContext(UserContext);
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit } = useForm();
   const [formError, setFormError] = useState("");
 
   const onSubmit = (data) => {

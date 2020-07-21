@@ -1,4 +1,4 @@
-import React, { lazy, useState, useContext } from "react";
+import React, { lazy, useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import TakeExam from "./takeExam";
 import MakeExam from "./makeExam";
@@ -17,9 +17,9 @@ export default function Routes() {
     (state: TRootState) => state.examState.examFinished
   );
 
-  const makeRoutes = () => {
-    if (user.role === "user") {
-      return (
+  return (
+    <Switch>
+      {user.role === "user" && (
         <>
           <Route exact path="/">
             {examFinished ? (
@@ -42,26 +42,20 @@ export default function Routes() {
             <Redirect to="/exam/" />
           </Route>
         </>
-      );
-    } else if (user.role === "admin") {
-      return (
+      )}
+      {user.role === "admin" && (
         <Route path="/">
           <MakeExam />
         </Route>
-      );
-    } else {
-      return (
-        <>
-          <Route path="/login/">
-            <Login />
-          </Route>
-          <Route path="/">
-            <Redirect to="/login/" />
-          </Route>
-        </>
-      );
-    }
-  };
-
-  return <Switch>{makeRoutes()}</Switch>;
+      )}
+      <>
+        <Route path="/login/">
+          <Login />
+        </Route>
+        <Route path="/">
+          <Redirect to="/login/" />
+        </Route>
+      </>
+    </Switch>
+  );
 }

@@ -37,7 +37,7 @@ export default function FreeTexTFreeTextQuestion({
         });
       };
     });
-  }, [question]);
+  }, [question, getValues, ]);
 
   const { questionId } = question;
 

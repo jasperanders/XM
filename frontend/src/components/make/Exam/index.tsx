@@ -1,10 +1,9 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { v4 } from "uuid";
 import { useForm } from "react-hook-form";
 import { Input, Badge, Heading, Flex, Select, Button } from "theme-ui";
 
 import { ExamContext } from "../../../services/examContext";
-import { findAllByAltText } from "@testing-library/react";
 import HttpService from "../../../services/http";
 import apiRoutes from "../../../services/apiRoutes";
 
@@ -15,7 +14,7 @@ export default function Exam() {
     addedUsers: [],
     addedQuestions: [],
   });
-  const { register, handleSubmit, watch, errors, reset, getValues } = useForm();
+  const { register, handleSubmit, reset, getValues } = useForm();
 
   const addUser = () => {
     const newUser = getValues().newUser;
