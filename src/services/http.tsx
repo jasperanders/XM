@@ -96,7 +96,7 @@ class HttpServiceClass {
         data,
         params: {
           ...params,
-          master: settings.API_KEY,
+          master: `${settings.API_KEY}`,
           ts: noCache ? Date.now() : null,
         },
         headers: {
