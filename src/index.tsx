@@ -22,15 +22,15 @@ store.subscribe(() => {
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <UserContextProvider>
-        <ExamContextProvider>
-          <Router history={history}>
-            <ThemeProvider theme={theme}>
-              <App />
-            </ThemeProvider>
-          </Router>
-        </ExamContextProvider>
-      </UserContextProvider>
+      {/* <UserContextProvider> */}
+      {/* <ExamContextProvider> */}
+      <Router history={history}>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </Router>
+      {/* </ExamContextProvider> */}
+      {/* </UserContextProvider> */}
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")
