@@ -1,6 +1,6 @@
 import axios from "axios";
 import settings from "../settings";
-import { history } from "../index";
+import { history } from "../App";
 
 const REQUEST_METHOD = {
   GET: "GET",
@@ -27,7 +27,6 @@ class HttpServiceClass {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
       },
-      // withCredentials: true,
     });
 
     // The AuthToken is set after login. If the user was already loaded on init, we need to set it.

@@ -16,6 +16,7 @@ export default function Routes() {
   const examFinished = useSelector(
     (state: TRootState) => state.examState.examFinished
   );
+  console.log(examFinished);
 
   return (
     <Switch>
@@ -44,9 +45,14 @@ export default function Routes() {
         </>
       )}
       {user.role === "admin" && (
-        <Route path="/">
-          <MakeExam />
-        </Route>
+        <>
+          <Route path="/make/">
+            <MakeExam />
+          </Route>
+          <Route path="/">
+            <Redirect to="/make/" />
+          </Route>
+        </>
       )}
       <>
         <Route path="/login/">

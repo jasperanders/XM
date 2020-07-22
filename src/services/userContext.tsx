@@ -9,10 +9,10 @@ export const UserContext = React.createContext({
   user: { _id: null, role: null },
   loadUser: () => {},
   wipeUser: () => {},
-  setUser: (value) => {},
+  setUser: (newState) => {},
 });
 
-export default function UserContextProvider({ children }) {
+const UserContextProvider = ({ children }) => {
   const [user, setUser] = useState({
     _id: null,
     role: null,
@@ -41,7 +41,6 @@ export default function UserContextProvider({ children }) {
         })
         .catch(() => false);
     }
-    return new Promise((resolve) => resolve());
   };
 
   const wipeUser = () => {
@@ -52,11 +51,11 @@ export default function UserContextProvider({ children }) {
     });
   };
 
+  // For more details on how the React Context API works, take a look at https://reactjs.org/docs/context.html
+  // In this case we provide an user object and both the load- and wipe-user function to the react context.
+  // In order to access the right component scope we also need to bind the this-context. In a case, where we don't
+  // do that the function cannot access the component state and thus cannot change the user-context.
   return (
-    // For more details on how the React Context API works, take a look at https://reactjs.org/docs/context.html
-    // In this case we provide an user object and both the load- and wipe-user function to the react context.
-    // In order to access the right component scope we also need to bind the this-context. In a case, where we don't
-    // do that the function cannot access the component state and thus cannot change the user-context.
     <UserContext.Provider
       value={{
         user,
@@ -69,4 +68,6 @@ export default function UserContextProvider({ children }) {
       <button onClick={wipeUser}>Logout</button>
     </UserContext.Provider>
   );
-}
+};
+
+export default UserContextProvider;

@@ -28,7 +28,7 @@ import {
   initialAnswerBodyFreeTextTable,
   initialQuestionBodyFreeTextTable,
 } from "./initialState";
-import { history } from "../index";
+import { history } from "../App";
 
 // ================= Basic Tables =====================
 

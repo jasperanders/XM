@@ -3,6 +3,7 @@ import Question from "./Question";
 import Tabs from "../basics/Tab";
 import { questionTypes } from "../../constants/constants";
 import Exam from "./Exam";
+import { Button } from "theme-ui";
 
 export default function Make() {
   const [mode, setMode] = useState("exam");
@@ -21,6 +22,18 @@ export default function Make() {
       ) : (
         <Exam />
       )}
+      <Button
+        onClick={() => {
+          if (mode === "question") {
+            setMode("exam");
+          } else {
+            setMode("question");
+          }
+        }}
+      >
+        Change Mode
+      </Button>
     </div>
   );
 }
+  
