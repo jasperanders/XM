@@ -1,6 +1,7 @@
 import axios from "axios";
 import settings from "../settings";
 import { history } from "../App";
+import { config } from "process";
 
 const REQUEST_METHOD = {
   GET: "GET",
@@ -93,7 +94,11 @@ class HttpServiceClass {
         url: `${settings.REACT_APP_API_URL}${path}`,
         method,
         data,
-        params: { ...params, master: "a", ts: noCache ? Date.now() : null },
+        params: {
+          ...params,
+          master: settings.API_KEY,
+          ts: noCache ? Date.now() : null,
+        },
         headers: {
           Authorization: authToken ? `Bearer ${authToken}` : undefined,
         },
