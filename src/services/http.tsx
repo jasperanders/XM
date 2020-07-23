@@ -139,7 +139,7 @@ class HttpServiceClass {
    * @return {*}
    */
   get = (path, params = {}, noCache = false) =>
-    this.handleRequest(REQUEST_METHOD.GET, path, {}, params, noCache);
+    this.handleRequest(REQUEST_METHOD.GET, path, params, noCache);
 
   /**
    * @function

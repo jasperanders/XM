@@ -125,7 +125,7 @@ export default function Exam() {
             }}
           >
             <Select sx={{ margin: "0.5rem" }} ref={register} name="newQuestion">
-              {allQuestions.rows.map((el) => {
+              {allQuestions.map((el) => {
                 return (
                   <option key={v4()} value={JSON.stringify(el)}>
                     {el.content.title}
