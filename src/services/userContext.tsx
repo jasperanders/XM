@@ -36,7 +36,7 @@ const UserContextProvider = ({ children }) => {
     if (!user._id && authToken) {
       return HttpService.get(apiRoutes.USER_ME, authToken)
         .then(({ data }) => {
-          console.log("data is", data);
+          console.log("User is", data);
           setUser(data);
         })
         .catch(() => false);

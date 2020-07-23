@@ -22,7 +22,7 @@ export const ExamContext = React.createContext({
   loading: true,
   loadAllUsers: () => {},
   allUsers: { rows: [] },
-  allQuestions: { rows: [] },
+  allQuestions: [],
 });
 
 const ExamContextProvider = ({ children }) => {
@@ -30,7 +30,7 @@ const ExamContextProvider = ({ children }) => {
 
   const [loading, setLoading] = useState(true);
   const [allUsers, setAllUsers] = useState({ rows: [] });
-  const [allQuestions, setAllQuestions] = useState({ rows: [] });
+  const [allQuestions, setAllQuestions] = useState([]);
   const [allExams, setAllExams] = useState({ rows: [] });
   const [allFreeTextQuestion, setAllFreeTextQuestion] = useState({ rows: [] });
   const [allMultipleChoice, setAllMultipleChoice] = useState({ rows: [] });
@@ -40,17 +40,22 @@ const ExamContextProvider = ({ children }) => {
   useEffect(() => {
     setLoading(true);
     if (user.role) {
-      loadAllQuestions().then(() => {
-        loadAllFreeText().then(() => {
-          loadAllMultipleChoice().then(() => {
-            loadAllExams().then(() => {
-              loadAllUsers()
-                .then(() => {
-                  setLoading(false);
-                })
-                .catch(() => {
-                  setLoading(false);
-                });
+      loadAllExams().then((questionIds) => {
+        console.log("provided question ids", questionIds);
+        // Provide all question Ids from User Exams
+        loadQuestions(questionIds).then(() => {
+          loadAllFreeText(questionIds).then(() => {
+            loadAllMultipleChoice(questionIds).then(() => {
+              // if user is Admin get all users for later use.
+              if (user.role === "admin") {
+                loadAllUsers()
+                  .then(() => {
+                    setLoading(false);
+                  })
+                  .catch(() => {});
+              } else {
+                setLoading(false);
+              }
             });
           });
         });
@@ -70,58 +75,117 @@ const ExamContextProvider = ({ children }) => {
       .catch("fetch users failed");
   };
 
-  const loadAllQuestions = () => {
-    return HttpService.get(apiRoutes.QUESTION)
+  const loadQuestions = (ids) => {
+    return HttpService.post(apiRoutes.FIND_QUESTIONS, { ids: ids })
       .then(({ data }) => {
+        console.log("find questions", data);
         setAllQuestions(data);
-        const newTable = { byId: {}, allIds: [] };
-        const newAnswerTable = { byId: {}, allIds: [] };
-        const newFreeTextAnswerTable = { byId: {}, allIds: [] };
-        const newMultipleChoiceAnswerTable = { byId: {}, allIds: [] };
-        data.rows.map(({ _id, content }) => {
-          newTable.byId[_id] = {
-            questionId: _id,
-            questionType: content.questionType,
-            text: content.text,
-            timeLimitMs: content.timeLimitMs,
-            title: content.title,
+
+        /**
+         * Define temporary tables
+         */
+        let newTable = { byId: {}, allIds: [] };
+        let newAnswerTable = { byId: {}, allIds: [] };
+        let newFreeTextAnswerTable = { byId: {}, allIds: [] };
+        let newMultipleChoiceAnswerTable = { byId: {}, allIds: [] };
+
+        /**
+         * Create new Question Table for each Question
+         */
+
+        data.map(({ id: questionId, content }) => {
+          // add questions via id
+          newTable = {
+            ...newTable,
+            byId: {
+              ...newTable.byId,
+              [questionId]: {
+                questionId: questionId,
+                questionType: content.questionType,
+                text: content.text,
+                timeLimitMs: content.timeLimitMs,
+                title: content.title,
+              },
+            },
           };
-          newTable.allIds.push(_id);
-          const newAnswerId = v4();
-          newAnswerTable.byId[_id] = {
-            questionId: _id,
-            answerId: newAnswerId,
-            timeStart: null,
-            timeEnd: null,
-            timeExpired: false,
-          };
-          newAnswerTable.allIds.push(_id);
-          if (content.questionType === "freeText") {
-            newFreeTextAnswerTable.byId[_id] = {
-              questionId: _id,
-              answerId: newAnswerId,
-              answerText: "",
+          newTable = { ...newTable, allIds: [...newTable.allIds, questionId] };
+
+          // create new Answer Object for every question for user.
+          HttpService.post(apiRoutes.ANSWER, {
+            content: { questionId: questionId },
+          }).then(({ data }) => {
+            const { id: answerId } = data;
+
+            console.log("question data is", data);
+            // set answer table
+            newAnswerTable = {
+              ...newAnswerTable,
+              byId: {
+                ...newAnswerTable.byId,
+                [questionId]: {
+                  questionId: questionId,
+                  answerId: answerId,
+                  timeStart: null,
+                  timeEnd: null,
+                  timeExpired: false,
+                },
+              },
             };
-            newFreeTextAnswerTable.allIds.push(newAnswerId);
-          } else if (content.questionType === "multipleChoice") {
-            newMultipleChoiceAnswerTable.byId[_id] = {
-              questionId: _id,
-              answerId: newAnswerId,
-              selectedAnswers: "",
+            newAnswerTable = {
+              ...newAnswerTable,
+              allIds: [...newAnswerTable.allIds, [questionId]],
             };
-            newMultipleChoiceAnswerTable.allIds.push(newAnswerId);
-          }
+
+            // Create Answer bodies. But not in Backend yet.
+            if (content.questionType === "freeText") {
+              newFreeTextAnswerTable = {
+                ...newFreeTextAnswerTable,
+                byId: {
+                  ...newFreeTextAnswerTable.byId,
+                  [questionId]: {
+                    questionId: questionId,
+                    answerId: answerId,
+                    answerText: "",
+                  },
+                },
+              };
+              newFreeTextAnswerTable = {
+                ...newFreeTextAnswerTable,
+                allIds: [...newFreeTextAnswerTable.allIds, questionId],
+              };
+            } else if (content.questionType === "multipleChoice") {
+              newMultipleChoiceAnswerTable = {
+                ...newMultipleChoiceAnswerTable,
+                byId: {
+                  ...newMultipleChoiceAnswerTable.byId,
+                  [questionId]: {
+                    questionId: questionId,
+                    answerId: data._id,
+                    selectedAnswers: "",
+                  },
+                },
+              };
+              newMultipleChoiceAnswerTable = {
+                ...newMultipleChoiceAnswerTable,
+                allIds: [...newMultipleChoiceAnswerTable.allIds, questionId],
+              };
+            }
+
+            /**
+             * Set temporary tables to Redux store.
+             */
+            dispatch(setQuestionTable({ newTable }));
+            dispatch(setAnswerTable({ newTable: newAnswerTable }));
+            dispatch(
+              setAnswerBodyFreeTextTable({ newTable: newFreeTextAnswerTable })
+            );
+            dispatch(
+              setAnswerBodyMultipleChoiceTable({
+                newTable: newMultipleChoiceAnswerTable,
+              })
+            );
+          });
         });
-        dispatch(setQuestionTable({ newTable }));
-        dispatch(setAnswerTable({ newTable: newAnswerTable }));
-        dispatch(
-          setAnswerBodyFreeTextTable({ newTable: newFreeTextAnswerTable })
-        );
-        dispatch(
-          setAnswerBodyMultipleChoiceTable({
-            newTable: newMultipleChoiceAnswerTable,
-          })
-        );
       })
       .catch("fetch questions failed");
   };
@@ -129,11 +193,11 @@ const ExamContextProvider = ({ children }) => {
   const loadAllExams = () => {
     return HttpService.get(apiRoutes.EXAM)
       .then(({ data }) => {
-        console.log(data);
         setAllExams(data);
         const newTable = { byId: {}, allIds: [] };
         const firstQuestionId = data?.rows[0]?.content?.questionsById[0];
         const firstExam = data?.rows[0]?._id;
+        const allQuestions = [];
 
         data.rows.map(({ _id, content }) => {
           newTable.byId[_id] = {
@@ -142,6 +206,7 @@ const ExamContextProvider = ({ children }) => {
             questionsById: content.questionsById,
           };
           newTable.allIds.push(_id);
+          content.questionsById.map((el) => allQuestions.push(el));
         });
         dispatch(setExamTable({ newTable }));
         dispatch(
@@ -156,16 +221,20 @@ const ExamContextProvider = ({ children }) => {
             },
           })
         );
+        return allQuestions;
       })
       .catch("fetch Exams failed");
   };
 
-  const loadAllFreeText = () => {
-    return HttpService.get(apiRoutes.FREE_TEXT_QUESTION)
+  const loadAllFreeText = (questionIds) => {
+    return HttpService.post(apiRoutes.FIND_FREE_TEXT_QUESTION, {
+      ids: questionIds,
+    })
       .then(({ data }) => {
+        console.log("find freetext", data);
         setAllFreeTextQuestion(data);
         const newTable = { byId: {}, allIds: [] };
-        data.rows.map(({ _id, content }) => {
+        data.map(({ _id, content }) => {
           newTable.byId[content.questionId] = {
             questionId: content.questionId,
           };
@@ -176,12 +245,15 @@ const ExamContextProvider = ({ children }) => {
       .catch("fetch free text failed");
   };
 
-  const loadAllMultipleChoice = () => {
-    return HttpService.get(apiRoutes.MULTIPLE_CHOICE_QUESTION)
+  const loadAllMultipleChoice = (questionIds) => {
+    return HttpService.post(apiRoutes.FIND_MULTIPLE_CHOICE_QUESTION, {
+      ids: questionIds,
+    })
       .then(({ data }) => {
+        console.log("find multiple", data);
         setAllMultipleChoice(data);
         const newTable = { byId: {}, allIds: [] };
-        data.rows.map(({ _id, content }) => {
+        data.map(({ _id, content }) => {
           console.log(content);
           newTable.byId[content.questionId] = {
             questionId: content.questionIds,

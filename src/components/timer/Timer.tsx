@@ -45,7 +45,7 @@ export default function Timer({
         } else {
           console.log(questionId);
           dispatch(answerQuestionAction());
-          // dispatch(nextQuestion({ currentExam }));
+          dispatch(nextQuestion({ currentExam }));
           clearInterval(interval);
         }
       }, 1000);

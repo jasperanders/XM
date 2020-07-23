@@ -4,6 +4,8 @@ import {
   TAnswerMultipleChoicePayload,
   TSetCurrentQuestionId,
 } from "../types/reduxTypes";
+import HttpService from "../services/http";
+import apiRoutes from "../services/apiRoutes";
 
 export const ANSWER_FREE_TEXT_QUESTION = "ANSWER_FREE_TEXT_QUESTION";
 export const ANSWER_MULTIPLE_CHOICE_QUESTION =
@@ -37,6 +39,7 @@ export function answerFreeTextQuestion(payload: TAnswerFreeTextPayload) {
 export function answerMultipleChoiceQuestion(
   payload: TAnswerMultipleChoicePayload
 ) {
+  HttpService.post(apiRoutes.ANSWER, {})
   return { type: ANSWER_MULTIPLE_CHOICE_QUESTION, payload };
 }
 
