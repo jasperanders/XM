@@ -116,7 +116,7 @@ const ExamContextProvider = ({ children }) => {
           }).then(({ data }) => {
             const { id: answerId } = data;
 
-            console.log("question data is", data);
+            console.log("answer data is", data);
             // set answer table
             newAnswerTable = {
               ...newAnswerTable,
@@ -196,6 +196,7 @@ const ExamContextProvider = ({ children }) => {
         setAllExams(data);
         const newTable = { byId: {}, allIds: [] };
         const firstQuestionId = data?.rows[0]?.content?.questionsById[0];
+        console.log("Exam data ", data);
         const firstExam = data?.rows[0]?._id;
         const allQuestions = [];
 

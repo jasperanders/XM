@@ -30,6 +30,7 @@ export default function MultipleChoiceQuestion({
   );
 
   const currentExam = useSelector((state: TRootState) => state.examTable);
+  const answerTable = useSelector((state: TRootState) => state.answerTable);
 
   const { currentExamId, currentQuestionId } = useSelector(
     (state: TRootState) => state.examState
@@ -63,6 +64,7 @@ export default function MultipleChoiceQuestion({
         const selectedAnswers = makeSelectedAnswers(getValues({ nest: true }));
         return answerMultipleChoiceQuestion({
           questionId: question.questionId,
+          answerId: answerTable.byId[currentQuestionId].answerId,
           selectedAnswers,
         });
       };
@@ -84,10 +86,16 @@ export default function MultipleChoiceQuestion({
     dispatch(
       answerMultipleChoiceQuestion({
         questionId: question.questionId,
+        answerId: answerTable.byId[currentQuestionId].answerId,
         selectedAnswers,
       })
     );
-    dispatch(setAnswerEndTime({ questionId: question.questionId }));
+    dispatch(
+      setAnswerEndTime({
+        questionId: question.questionId,
+        answerId: answerTable.byId[currentQuestionId].answerId,
+      })
+    );
     dispatch(nextQuestion({ currentExam: currentExam.byId[currentExamId] }));
   };
   return (

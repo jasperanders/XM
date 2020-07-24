@@ -2,20 +2,19 @@ import { TExam } from "./examTypes";
 
 export interface TAnswerFreeTextPayload {
   questionId: string;
+  answerId: string;
   answer: string;
 }
 
 export interface TAnswerMultipleChoicePayload {
   questionId: string;
+  answerId: string;
   selectedAnswers: Array<string>;
 }
 
 export interface TUseTimerPayload {
+  answerId: string;
   questionId: string;
-}
-
-export interface TCountDownAppTimer {
-  countDownBy: number;
 }
 
 export interface TNextQuestionPayload {

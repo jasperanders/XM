@@ -40,7 +40,7 @@ export default function Exam() {
     const questionsById = [];
     const examUsers = [];
     addedQuestions.map((el) => {
-      questionsById.push(JSON.parse(el)._id);
+      questionsById.push(JSON.parse(el).id);
     });
     addedUsers.map((el) => {
       examUsers.push(JSON.parse(el)._id);

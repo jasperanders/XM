@@ -33,22 +33,57 @@ export const SET_ANSWER_BODY_FREE_TEXT_TABLE =
   "SET_ANSWER_BODY_FREE_TEXT_TABLE";
 
 export function answerFreeTextQuestion(payload: TAnswerFreeTextPayload) {
-  return { type: ANSWER_FREE_TEXT_QUESTION, payload };
+  try {
+    HttpService.post(apiRoutes.FREE_TEXT_ANSWER, {
+      content: {
+        answerId: payload.answerId,
+        questionId: payload.questionId,
+        answerText: payload.answer,
+      },
+    });
+  } catch {
+    console.error("Could not post, check your connection.");
+  } finally {
+    return { type: ANSWER_FREE_TEXT_QUESTION, payload };
+  }
 }
 
 export function answerMultipleChoiceQuestion(
   payload: TAnswerMultipleChoicePayload
 ) {
-  HttpService.post(apiRoutes.ANSWER, {})
-  return { type: ANSWER_MULTIPLE_CHOICE_QUESTION, payload };
+  try {
+    HttpService.post(apiRoutes.MULTIPLE_CHOICE_ANSWER, {
+      content: {
+        answerId: payload.answerId,
+        questionId: payload.questionId,
+        answers: payload.selectedAnswers,
+      },
+    });
+  } catch {
+    console.error("Could not post, check your connection.");
+  } finally {
+    return { type: ANSWER_MULTIPLE_CHOICE_QUESTION, payload };
+  }
 }
 
 export function setAnswerStartTime(payload: TUseTimerPayload) {
-  return { type: SET_ANSWER_START_TIME, payload };
+  try {
+    HttpService.put(`${apiRoutes.START_ANSWER_TIMER}${payload.answerId}`, {});
+  } catch {
+    console.error("Could not post, check your connection.");
+  } finally {
+    return { type: SET_ANSWER_START_TIME, payload };
+  }
 }
 
 export function setAnswerEndTime(payload: TUseTimerPayload) {
-  return { type: SET_ANSWER_END_TIME, payload };
+  try {
+    HttpService.put(`${apiRoutes.END_ANSWER_TIMER}${payload.answerId}`, {});
+  } catch {
+    console.error("Could not post, check your connection.");
+  } finally {
+    return { type: SET_ANSWER_END_TIME, payload };
+  }
 }
 
 export function nextQuestion(payload) {
@@ -57,10 +92,6 @@ export function nextQuestion(payload) {
 
 export function previousQuestion(payload) {
   return { type: PREVIOUS_QUESTION, payload };
-}
-
-export function countDownAppTimer(payload) {
-  return { type: COUNT_DOWN_APP_TIMER, payload };
 }
 
 export function setCurrentQuestionId(payload: TSetCurrentQuestionId) {

@@ -12,15 +12,22 @@ import { setAnswerStartTime } from "../../redux/actions";
 export default function Question({ question }: TProps) {
   const [currentAnswerAction, setCurrentAnswerAction] = useState(() => {});
   const { questionId, questionType, title, text } = question;
+
   const dispatch = useDispatch();
   const { currentExamId } = useSelector((state: TRootState) => state.examState);
   const currentExam = useSelector(
     (state: TRootState) => state.examTable.byId[currentExamId]
   );
+  const answerTable = useSelector((state: TRootState) => state.answerTable);
   const { register, handleSubmit, reset, getValues } = useForm();
 
   useEffect(() => {
-    dispatch(setAnswerStartTime({ questionId }));
+    dispatch(
+      setAnswerStartTime({
+        questionId,
+        answerId: answerTable.byId[questionId].answerId,
+      })
+    );
     reset();
   }, [questionId, dispatch, reset]);
 

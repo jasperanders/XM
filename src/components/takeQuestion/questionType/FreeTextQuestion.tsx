@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { freeTextFormName } from "../../../constants/constants";
 import { Textarea, Button } from "theme-ui";
-import { answerFreeTextQuestion, nextQuestion } from "../../../redux/actions";
+import {
+  answerFreeTextQuestion,
+  nextQuestion,
+  setAnswerEndTime,
+} from "../../../redux/actions";
 import { TRootState } from "../../../types/examTypes";
 
 export default function FreeTexTFreeTextQuestion({
@@ -20,6 +24,7 @@ export default function FreeTexTFreeTextQuestion({
   const dispatch = useDispatch();
   const currentExam = useSelector((state: TRootState) => state.examTable);
   const { currentExamId } = useSelector((state: TRootState) => state.examState);
+  const answerTable = useSelector((state: TRootState) => state.answerTable);
 
   /**
    * Effect Hooks
@@ -32,19 +37,30 @@ export default function FreeTexTFreeTextQuestion({
         const answer = getValues({ nest: true })[freeTextFormName];
 
         return answerFreeTextQuestion({
+          answerId: answerTable.byId[questionId].answerId,
           questionId: questionId,
           answer,
         });
       };
     });
-  }, [question, getValues, ]);
+  }, [question, getValues]);
 
   const { questionId } = question;
 
   const onSubmit = (data) => {
     const answer = data[freeTextFormName];
-    const payload = { questionId, answer };
+    const payload = {
+      questionId,
+      answerId: answerTable.byId[questionId].answerId,
+      answer,
+    };
     dispatch(answerFreeTextQuestion(payload));
+    dispatch(
+      setAnswerEndTime({
+        questionId: question.questionId,
+        answerId: answerTable.byId[questionId].answerId,
+      })
+    );
     dispatch(nextQuestion({ currentExam: currentExam.byId[currentExamId] }));
   };
 
