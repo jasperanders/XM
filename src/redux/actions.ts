@@ -1,6 +1,6 @@
 import {
   TAnswerFreeTextPayload,
-  TUseTimerPayload,
+  TUseTimerPayload, 
   TAnswerMultipleChoicePayload,
   TSetCurrentQuestionId,
 } from "../types/reduxTypes";

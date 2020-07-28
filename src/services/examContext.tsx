@@ -196,8 +196,8 @@ const ExamContextProvider = ({ children }) => {
         setAllExams(data);
         const newTable = { byId: {}, allIds: [] };
         const firstQuestionId = data?.rows[0]?.content?.questionsById[0];
-        console.log("Exam data ", data);
         const firstExam = data?.rows[0]?._id;
+        console.log("Exam data ", data);
         const allQuestions = [];
 
         data.rows.map(({ _id, content }) => {
@@ -210,18 +210,6 @@ const ExamContextProvider = ({ children }) => {
           content.questionsById.map((el) => allQuestions.push(el));
         });
         dispatch(setExamTable({ newTable }));
-        dispatch(
-          setExamState({
-            newTable: {
-              currentExamId: firstExam,
-              currentQuestionIndex: 0,
-              currentQuestionId: firstQuestionId,
-              currentTime: null,
-              timerIsActive: true,
-              examFinished: false,
-            },
-          })
-        );
         return allQuestions;
       })
       .catch("fetch Exams failed");

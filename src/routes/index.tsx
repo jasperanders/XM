@@ -2,6 +2,7 @@ import React, { lazy, useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import TakeExam from "./takeExam";
 import MakeExam from "./makeExam";
+import SelectExam from "./selectExam";
 import Layout from "../components/layout/Layout";
 import { importMDX } from "mdx.macro";
 import ExamProgress from "../components/head/ExamProgress";
@@ -26,8 +27,11 @@ export default function Routes() {
             {examFinished ? (
               <Redirect to="/exam/done/" />
             ) : (
-              <Redirect to="/exam/" />
+              <Redirect to="/exam/select/" />
             )}
+          </Route>
+          <Route exact path="/exam/select/">
+            {examFinished ? <Redirect to="/exam/done/" /> : <SelectExam />}
           </Route>
           <Route exact path="/exam/">
             {examFinished ? <Redirect to="/exam/done/" /> : <TakeExam />}
@@ -40,7 +44,7 @@ export default function Routes() {
             )}
           </Route>
           <Route path="/">
-            <Redirect to="/exam/" />
+            <Redirect to="/exam/select/" />
           </Route>
         </>
       )}
