@@ -112,6 +112,7 @@ const exam_01: TExam = {
     question_01.questionId,
     question_02.questionId,
   ],
+  dueDate: new Date("12.07.2020 14:00"),
 };
 
 // =============== tables ================
@@ -157,11 +158,11 @@ export const initialAnswerBodyMultipleChoiceTable: TAnswerBodyMultipleChoiceTabl
 export const initialExamState: TExamState = {
   currentExamId: null,
   currentQuestionIndex: null,
-  // currentQuestionId: null,
   currentQuestionId: null,
   currentTime: null,
   timerIsActive: true,
   examFinished: false,
+  takingExam: false,
 };
 
 // =========================================

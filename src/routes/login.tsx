@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Input, Button, Heading, Text } from "theme-ui";
+import { Input, Button, Heading, Text, Box } from "theme-ui";
 import { useForm } from "react-hook-form";
 import Layout from "../components/layout/Layout";
 import HttpService from "../services/http";
@@ -28,20 +28,22 @@ export default function Login() {
     <Layout
       header={<Heading as="h1">XM</Heading>}
       mainContent={
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Input ref={register} name={"email"} placeholder="Email" />
-          <Input
-            sx={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}
-            placeholder="Password"
-            type="password"
-            ref={register}
-            name={"password"}
-          />
-          {formError && (
-            <Text variant="warning">Something went wrong. Try again.</Text>
-          )}
-          <Button type={"submit"}>Login</Button>
-        </form>
+        <Box sx={{ maxWidth: "20rem", margin: "auto" }}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Input ref={register} name={"email"} placeholder="Email" />
+            <Input
+              sx={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}
+              placeholder="Password"
+              type="password"
+              ref={register}
+              name={"password"}
+            />
+            {formError && (
+              <Text variant="warning">Something went wrong. Try again.</Text>
+            )}
+            <Button type={"submit"}>Login</Button>
+          </form>
+        </Box>
       }
     />
   );

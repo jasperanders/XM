@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { TRootState } from "../types/examTypes";
-import { Heading, Button, Box, Flex } from "theme-ui";
+import { Heading, Button, Box, Grid, Flex } from "theme-ui";
 import { useSelector, useDispatch } from "react-redux";
 import { history } from "../App";
 import Layout from "../components/layout/Layout";
@@ -44,24 +44,35 @@ export default function SelectExam() {
           <Flex sx={{ flexDirection: "column", justifyContent: "center" }}>
             {examTable.allIds.map((idx) => {
               return (
-                <>
-                  <Flex
-                    sx={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      borderBottom: "1px solid black",
-                      maxWidth: "50%",
-                    }}
+                <Grid
+                  columns={["1fr 1fr 1fr"]}
+                  sx={{
+                    margin: "auto",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    borderBottom: "1px solid black",
+                    width: ["100%", "100%", "60%"],
+                  }}
+                >
+                  <Box sx={{ textOverflow: "ellipsis", overflow: "hidden" }}>
+                    {examTable.byId[idx].name
+                      ? examTable.byId[idx].name
+                      : examTable.byId[idx].examId}
+                  </Box>
+                  <Box>
+                    {examTable.byId[idx].dueDate
+                      ? new Date(examTable.byId[idx].dueDate).toLocaleString(
+                          "de-De"
+                        )
+                      : "open"}
+                  </Box>
+                  <Button
+                    sx={{ maxWidth: "7rem", placeSelf: "end" }}
+                    onClick={() => setExam(idx)}
                   >
-                    <Box>
-                      {examTable.byId[idx].name
-                        ? examTable.byId[idx].name
-                        : examTable.byId[idx].examId}
-                    </Box>
-                    <Button onClick={() => setExam(idx)}>Take Exam</Button>
-                  </Flex>
-                </>
+                    Take Exam
+                  </Button>
+                </Grid>
               );
             })}
           </Flex>

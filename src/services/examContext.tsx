@@ -205,6 +205,7 @@ const ExamContextProvider = ({ children }) => {
             examId: _id,
             name: content.name,
             questionsById: content.questionsById,
+            dueDate: content.dueDate ? content.dueDate : null,
           };
           newTable.allIds.push(_id);
           content.questionsById.map((el) => allQuestions.push(el));
