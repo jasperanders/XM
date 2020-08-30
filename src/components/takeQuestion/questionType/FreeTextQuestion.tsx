@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { freeTextFormName } from "../../../constants/constants";
-import { Textarea, Button } from "theme-ui";
+import { Textarea, Button, Flex, Text } from "theme-ui";
 import {
   answerFreeTextQuestion,
   nextQuestion,
@@ -25,6 +25,8 @@ export default function FreeTexTFreeTextQuestion({
   const currentExam = useSelector((state: TRootState) => state.examTable);
   const { currentExamId } = useSelector((state: TRootState) => state.examState);
   const answerTable = useSelector((state: TRootState) => state.answerTable);
+
+  const [currentWords, setCurrentWords] = useState(0);
 
   /**
    * Effect Hooks
@@ -65,23 +67,29 @@ export default function FreeTexTFreeTextQuestion({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Textarea
-        rows={10}
-        columns={20}
-        onPaste={(e) => {
-          e.preventDefault();
-          return false;
-        }}
-        onCopy={(e) => {
-          e.preventDefault();
-          return false;
-        }}
-        name={freeTextFormName}
-        defaultValue={question.storedAnswer}
-        ref={register}
-      />
-      <Button type="submit">Save and Next Question</Button>
-    </form>
+    <Flex sx={{ flexDirection: "column" }}>
+      <Text>{`Your current word count is: ${currentWords}`}</Text>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Textarea
+          rows={10}
+          columns={20}
+          onPaste={(e) => {
+            e.preventDefault();
+            return false;
+          }}
+          onCopy={(e) => {
+            e.preventDefault();
+            return false;
+          }}
+          name={freeTextFormName}
+          defaultValue={question.storedAnswer}
+          ref={register}
+          onChange={() => {
+            setCurrentWords(getValues()[freeTextFormName].split(" ").length);
+          }}
+        />
+        <Button type="submit">Save and Next Question</Button>
+      </form>
+    </Flex>
   );
 }
