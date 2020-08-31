@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
 
 import { freeTextFormName } from "../../../constants/constants";
 import { Textarea, Button, Flex, Text } from "theme-ui";
@@ -11,14 +12,13 @@ import {
 import { TRootState } from "../../../types/examTypes";
 
 export default function FreeTexTFreeTextQuestion({
-  register,
-  handleSubmit,
   question,
-  getValues,
   setCurrentAnswerAction,
   modalState,
   setModalState,
 }) {
+  const { register, handleSubmit, reset, getValues } = useForm();
+
   /**
    * Redux Hooks
    */
@@ -37,6 +37,8 @@ export default function FreeTexTFreeTextQuestion({
 
   useEffect(() => {
     setModalState({ ...modalState, continueModal: false });
+    setAnswerData(null);
+    reset();
     setCurrentAnswerAction(() => {
       return () => {
         // {nested: true} returns values as if they were submitted
@@ -56,7 +58,7 @@ export default function FreeTexTFreeTextQuestion({
       dispatchAnswerAction();
       setModalState({ ...modalState, showModal: false });
     }
-  }, [answerData, modalState]);
+  }, [answerData, modalState.continueModal]);
 
   const { questionId } = question;
 

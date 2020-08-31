@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Label, Checkbox, Button } from "theme-ui";
 import { TRootState } from "../../../types/examTypes";
 import { v4 } from "uuid";
+import { useForm } from "react-hook-form";
+
 import {
   nextQuestion,
   answerMultipleChoiceQuestion,
@@ -11,14 +13,13 @@ import {
 import { multipleChoiceFormName } from "../../../constants/constants";
 
 export default function MultipleChoiceQuestion({
-  register,
-  handleSubmit,
   question,
-  getValues,
   setCurrentAnswerAction,
   modalState,
   setModalState,
 }) {
+  const { register, handleSubmit, reset, getValues } = useForm();
+
   /**
    * Redux hooks
    */
@@ -87,10 +88,11 @@ export default function MultipleChoiceQuestion({
       dispatchAnswerAction();
       setModalState({ ...modalState, showModal: false });
     }
-  }, [answerData, modalState]);
+  }, [answerData, modalState.continueModal]);
 
   useEffect(() => {
     setModalState({ ...modalState, continueModal: false });
+    setAnswerData(null);
     setCurrentAnswerAction(() => {
       return () => {
         // {nested: true} returns values as if they were submitted

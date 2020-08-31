@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useForm } from "react-hook-form";
 import FreeTextQuestion from "./questionType/FreeTextQuestion";
 import MultipleChoiceQuestion from "./questionType/MultipleChoice";
 import { TQuestion, TRootState } from "../../types/examTypes";
@@ -24,7 +23,6 @@ export default function Question({ question }: TProps) {
     (state: TRootState) => state.examTable.byId[currentExamId]
   );
   const answerTable = useSelector((state: TRootState) => state.answerTable);
-  const { register, handleSubmit, reset, getValues } = useForm();
 
   useEffect(() => {
     dispatch(
@@ -33,8 +31,7 @@ export default function Question({ question }: TProps) {
         answerId: answerTable.byId[questionId].answerId,
       })
     );
-    // reset();
-  }, [questionId, dispatch, reset]);
+  }, [questionId, dispatch]);
 
   const questionBody = () => {
     switch (questionType) {
@@ -43,10 +40,7 @@ export default function Question({ question }: TProps) {
           <FreeTextQuestion
             modalState={modalState}
             setModalState={setModalState}
-            register={register}
-            handleSubmit={handleSubmit}
             question={question}
-            getValues={getValues}
             setCurrentAnswerAction={setCurrentAnswerAction}
           />
         );
@@ -55,10 +49,7 @@ export default function Question({ question }: TProps) {
           <MultipleChoiceQuestion
             modalState={modalState}
             setModalState={setModalState}
-            register={register}
-            handleSubmit={handleSubmit}
             question={question}
-            getValues={getValues}
             setCurrentAnswerAction={setCurrentAnswerAction}
           />
         );
