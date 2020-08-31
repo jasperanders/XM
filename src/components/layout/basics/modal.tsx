@@ -1,15 +1,24 @@
-import React, { Children } from "react";
-import { useSelector } from "react-redux";
-import { Heading, Container, Flex, Button } from "theme-ui";
-import { TRootState } from "../../../types/examTypes";
+import React, { useEffect } from "react";
+import { Container, Flex, Button } from "theme-ui";
 
-export default function ExamProgress({ setShowModal, handleOk, children }) {
+export default function Modal({ setShowModal, handleOk, children, ...props }) {
+  useEffect(() => {
+    if (props.timeModal) {
+      console.log("yes");
+    }
+    return () => {
+      console.log("cleanup");
+    };
+  });
+
   return (
     <>
       <Container
         onClick={(e) => {
           e.preventDefault();
-          setShowModal(false);
+          if (!props.timeModal) {
+            setShowModal(false);
+          }
         }}
         sx={{
           position: "fixed",
@@ -37,14 +46,18 @@ export default function ExamProgress({ setShowModal, handleOk, children }) {
       >
         {children}
         <Flex sx={{ flexDirection: "row", justifyContent: "flex-end" }}>
-          <Button
-            variant="warning"
-            sx={{ marginRight: "1rem" }}
-            onClick={() => setShowModal(false)}
-          >
-            Cancel
+          {!props.timeModal && (
+            <Button
+              variant="warning"
+              sx={{ marginRight: "1rem" }}
+              onClick={() => setShowModal(false)}
+            >
+              Cancel
+            </Button>
+          )}
+          <Button onClick={handleOk}>
+            {props.timeModal ? "Continue" : "Take Exam"}
           </Button>
-          <Button onClick={handleOk}>Take Exam</Button>
         </Flex>
       </Container>
     </>

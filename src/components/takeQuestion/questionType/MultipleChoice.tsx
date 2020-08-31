@@ -16,6 +16,8 @@ export default function MultipleChoiceQuestion({
   question,
   getValues,
   setCurrentAnswerAction,
+  modalState,
+  setModalState,
 }) {
   /**
    * Redux hooks
@@ -37,6 +39,12 @@ export default function MultipleChoiceQuestion({
   );
 
   /**
+   * React Hooks
+   */
+
+  const [answerData, setAnswerData] = useState(null);
+
+  /**
    * miscellaneous functions
    */
 
@@ -51,13 +59,38 @@ export default function MultipleChoiceQuestion({
     return selectedAnswers;
   };
 
+  const dispatchAnswerAction = () => {
+    const selectedAnswers = makeSelectedAnswers(answerData);
+    dispatch(
+      answerMultipleChoiceQuestion({
+        questionId: question.questionId,
+        answerId: answerTable.byId[currentQuestionId].answerId,
+        selectedAnswers,
+      })
+    );
+    dispatch(
+      setAnswerEndTime({
+        questionId: question.questionId,
+        answerId: answerTable.byId[currentQuestionId].answerId,
+      })
+    );
+    dispatch(nextQuestion({ currentExam: currentExam.byId[currentExamId] }));
+  };
+
   /**
    * Effect Hooks
    */
 
   useEffect(() => {
-    console.log(questionBodyTable);
-    console.log(question);
+    if (answerData && modalState.continueModal) {
+      console.log(answerData);
+      dispatchAnswerAction();
+      setModalState({ ...modalState, showModal: false });
+    }
+  }, [answerData, modalState]);
+
+  useEffect(() => {
+    setModalState({ ...modalState, continueModal: false });
     setCurrentAnswerAction(() => {
       return () => {
         // {nested: true} returns values as if they were submitted
@@ -82,21 +115,8 @@ export default function MultipleChoiceQuestion({
    * Destructuring
    */
   const onSubmit = (data) => {
-    const selectedAnswers = makeSelectedAnswers(data);
-    dispatch(
-      answerMultipleChoiceQuestion({
-        questionId: question.questionId,
-        answerId: answerTable.byId[currentQuestionId].answerId,
-        selectedAnswers,
-      })
-    );
-    dispatch(
-      setAnswerEndTime({
-        questionId: question.questionId,
-        answerId: answerTable.byId[currentQuestionId].answerId,
-      })
-    );
-    dispatch(nextQuestion({ currentExam: currentExam.byId[currentExamId] }));
+    setAnswerData(data);
+    setModalState({ ...modalState, showModal: true });
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -104,7 +124,6 @@ export default function MultipleChoiceQuestion({
         return (
           <div key={v4()}>
             <Label>
-              {/* <Controller as={Checkbox} name={multipleChoiceFormName} /> */}
               <Checkbox
                 defaultChecked={false}
                 name={`${multipleChoiceFormName}[${index}]`}

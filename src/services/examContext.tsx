@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { v4 } from "uuid";
 import HttpService, { storedAuthToken } from "./http";
 import apiRoutes from "./apiRoutes";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setExamTable,
   setQuestionTable,
@@ -15,6 +15,7 @@ import {
   setAnswerBodyMultipleChoiceTable,
 } from "../redux/actions";
 import { UserContext } from "./userContext";
+import { TRootState } from "../types/examTypes";
 
 // Initializes the Context. This constant must be imported, wherever
 // you need to access the user context
@@ -28,6 +29,7 @@ export const ExamContext = React.createContext({
 const ExamContextProvider = ({ children }) => {
   const { user } = useContext(UserContext);
 
+  const answerTable = useSelector((state: TRootState) => state.answerTable);
   const [loading, setLoading] = useState(true);
   const [allUsers, setAllUsers] = useState({ rows: [] });
   const [allQuestions, setAllQuestions] = useState([]);
@@ -85,7 +87,9 @@ const ExamContextProvider = ({ children }) => {
          * Define temporary tables
          */
         let newTable = { byId: {}, allIds: [] };
-        let newAnswerTable = { byId: {}, allIds: [] };
+        let newAnswerTable = answerTable
+          ? answerTable
+          : { byId: {}, allIds: [] };
         let newFreeTextAnswerTable = { byId: {}, allIds: [] };
         let newMultipleChoiceAnswerTable = { byId: {}, allIds: [] };
 
@@ -110,81 +114,83 @@ const ExamContextProvider = ({ children }) => {
           };
           newTable = { ...newTable, allIds: [...newTable.allIds, questionId] };
 
-          // create new Answer Object for every question for user.
-          HttpService.post(apiRoutes.ANSWER, {
-            content: { questionId: questionId },
-          }).then(({ data }) => {
-            const { id: answerId } = data;
+          if (!answerTable.byId[questionId]) {
+            // create new Answer Object for every question for user.
+            HttpService.post(apiRoutes.ANSWER, {
+              content: { questionId: questionId },
+            }).then(({ data }) => {
+              const { id: answerId } = data;
 
-            console.log("answer data is", data);
-            // set answer table
-            newAnswerTable = {
-              ...newAnswerTable,
-              byId: {
-                ...newAnswerTable.byId,
-                [questionId]: {
-                  questionId: questionId,
-                  answerId: answerId,
-                  timeStart: null,
-                  timeEnd: null,
-                  timeExpired: false,
-                },
-              },
-            };
-            newAnswerTable = {
-              ...newAnswerTable,
-              allIds: [...newAnswerTable.allIds, [questionId]],
-            };
-
-            // Create Answer bodies. But not in Backend yet.
-            if (content.questionType === "freeText") {
-              newFreeTextAnswerTable = {
-                ...newFreeTextAnswerTable,
+              console.log("answer data is", data);
+              // set answer table
+              newAnswerTable = {
+                ...newAnswerTable,
                 byId: {
-                  ...newFreeTextAnswerTable.byId,
+                  ...newAnswerTable.byId,
                   [questionId]: {
                     questionId: questionId,
                     answerId: answerId,
-                    answerText: "",
+                    timeStart: null,
+                    timeEnd: null,
+                    timeExpired: false,
                   },
                 },
               };
-              newFreeTextAnswerTable = {
-                ...newFreeTextAnswerTable,
-                allIds: [...newFreeTextAnswerTable.allIds, questionId],
+              newAnswerTable = {
+                ...newAnswerTable,
+                allIds: [...newAnswerTable.allIds, questionId],
               };
-            } else if (content.questionType === "multipleChoice") {
-              newMultipleChoiceAnswerTable = {
-                ...newMultipleChoiceAnswerTable,
-                byId: {
-                  ...newMultipleChoiceAnswerTable.byId,
-                  [questionId]: {
-                    questionId: questionId,
-                    answerId: data._id,
-                    selectedAnswers: "",
-                  },
-                },
-              };
-              newMultipleChoiceAnswerTable = {
-                ...newMultipleChoiceAnswerTable,
-                allIds: [...newMultipleChoiceAnswerTable.allIds, questionId],
-              };
-            }
 
-            /**
-             * Set temporary tables to Redux store.
-             */
-            dispatch(setQuestionTable({ newTable }));
-            dispatch(setAnswerTable({ newTable: newAnswerTable }));
-            dispatch(
-              setAnswerBodyFreeTextTable({ newTable: newFreeTextAnswerTable })
-            );
-            dispatch(
-              setAnswerBodyMultipleChoiceTable({
-                newTable: newMultipleChoiceAnswerTable,
-              })
-            );
-          });
+              // Create Answer bodies. But not in Backend yet.
+              if (content.questionType === "freeText") {
+                newFreeTextAnswerTable = {
+                  ...newFreeTextAnswerTable,
+                  byId: {
+                    ...newFreeTextAnswerTable.byId,
+                    [questionId]: {
+                      questionId: questionId,
+                      answerId: answerId,
+                      answerText: "",
+                    },
+                  },
+                };
+                newFreeTextAnswerTable = {
+                  ...newFreeTextAnswerTable,
+                  allIds: [...newFreeTextAnswerTable.allIds, questionId],
+                };
+              } else if (content.questionType === "multipleChoice") {
+                newMultipleChoiceAnswerTable = {
+                  ...newMultipleChoiceAnswerTable,
+                  byId: {
+                    ...newMultipleChoiceAnswerTable.byId,
+                    [questionId]: {
+                      questionId: questionId,
+                      answerId: data._id,
+                      selectedAnswers: "",
+                    },
+                  },
+                };
+                newMultipleChoiceAnswerTable = {
+                  ...newMultipleChoiceAnswerTable,
+                  allIds: [...newMultipleChoiceAnswerTable.allIds, questionId],
+                };
+              }
+
+              /**
+               * Set temporary tables to Redux store.
+               */
+              dispatch(setQuestionTable({ newTable }));
+              dispatch(setAnswerTable({ newTable: newAnswerTable }));
+              dispatch(
+                setAnswerBodyFreeTextTable({ newTable: newFreeTextAnswerTable })
+              );
+              dispatch(
+                setAnswerBodyMultipleChoiceTable({
+                  newTable: newMultipleChoiceAnswerTable,
+                })
+              );
+            });
+          }
         });
       })
       .catch("fetch questions failed");

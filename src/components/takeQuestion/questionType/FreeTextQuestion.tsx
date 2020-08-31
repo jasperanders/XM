@@ -16,6 +16,8 @@ export default function FreeTexTFreeTextQuestion({
   question,
   getValues,
   setCurrentAnswerAction,
+  modalState,
+  setModalState,
 }) {
   /**
    * Redux Hooks
@@ -25,6 +27,7 @@ export default function FreeTexTFreeTextQuestion({
   const currentExam = useSelector((state: TRootState) => state.examTable);
   const { currentExamId } = useSelector((state: TRootState) => state.examState);
   const answerTable = useSelector((state: TRootState) => state.answerTable);
+  const [answerData, setAnswerData] = useState(null);
 
   const [currentWords, setCurrentWords] = useState(0);
 
@@ -33,6 +36,7 @@ export default function FreeTexTFreeTextQuestion({
    */
 
   useEffect(() => {
+    setModalState({ ...modalState, continueModal: false });
     setCurrentAnswerAction(() => {
       return () => {
         // {nested: true} returns values as if they were submitted
@@ -47,23 +51,37 @@ export default function FreeTexTFreeTextQuestion({
     });
   }, [question, getValues]);
 
+  useEffect(() => {
+    if (answerData && modalState.continueModal) {
+      dispatchAnswerAction();
+      setModalState({ ...modalState, showModal: false });
+    }
+  }, [answerData, modalState]);
+
   const { questionId } = question;
 
-  const onSubmit = (data) => {
-    const answer = data[freeTextFormName];
-    const payload = {
-      questionId,
-      answerId: answerTable.byId[questionId].answerId,
-      answer,
-    };
-    dispatch(answerFreeTextQuestion(payload));
-    dispatch(
-      setAnswerEndTime({
-        questionId: question.questionId,
+  const dispatchAnswerAction = () => {
+    try {
+      const answer = answerData ? answerData[freeTextFormName] : undefined;
+      const payload = {
+        questionId,
         answerId: answerTable.byId[questionId].answerId,
-      })
-    );
-    dispatch(nextQuestion({ currentExam: currentExam.byId[currentExamId] }));
+        answer,
+      };
+      dispatch(answerFreeTextQuestion(payload));
+      dispatch(
+        setAnswerEndTime({
+          questionId: question.questionId,
+          answerId: answerTable.byId[questionId].answerId,
+        })
+      );
+      dispatch(nextQuestion({ currentExam: currentExam.byId[currentExamId] }));
+    } catch (e) {}
+  };
+
+  const onSubmit = (data) => {
+    setAnswerData(data);
+    setModalState({ ...modalState, showModal: true });
   };
 
   return (

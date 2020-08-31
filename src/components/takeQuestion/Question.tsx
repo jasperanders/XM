@@ -4,14 +4,19 @@ import { useForm } from "react-hook-form";
 import FreeTextQuestion from "./questionType/FreeTextQuestion";
 import MultipleChoiceQuestion from "./questionType/MultipleChoice";
 import { TQuestion, TRootState } from "../../types/examTypes";
-import { Heading } from "theme-ui";
-
+import { Heading, Text } from "theme-ui";
+import Modal from "../layout/basics/modal";
 import Timer from "../timer/Timer"; //!Important
 import { setAnswerStartTime } from "../../redux/actions";
 
 export default function Question({ question }: TProps) {
   const [currentAnswerAction, setCurrentAnswerAction] = useState(() => {});
   const { questionId, questionType, title, text } = question;
+
+  const [modalState, setModalState] = useState({
+    showModal: false,
+    continueModal: false,
+  });
 
   const dispatch = useDispatch();
   const { currentExamId } = useSelector((state: TRootState) => state.examState);
@@ -28,7 +33,7 @@ export default function Question({ question }: TProps) {
         answerId: answerTable.byId[questionId].answerId,
       })
     );
-    reset();
+    // reset();
   }, [questionId, dispatch, reset]);
 
   const questionBody = () => {
@@ -36,6 +41,8 @@ export default function Question({ question }: TProps) {
       case "freeText":
         return (
           <FreeTextQuestion
+            modalState={modalState}
+            setModalState={setModalState}
             register={register}
             handleSubmit={handleSubmit}
             question={question}
@@ -46,6 +53,8 @@ export default function Question({ question }: TProps) {
       case "multipleChoice":
         return (
           <MultipleChoiceQuestion
+            modalState={modalState}
+            setModalState={setModalState}
             register={register}
             handleSubmit={handleSubmit}
             question={question}
@@ -59,10 +68,26 @@ export default function Question({ question }: TProps) {
   };
   return (
     <div>
+      {modalState.showModal && (
+        <Modal
+          setShowModal={(showModal) => {
+            setModalState({ ...modalState, showModal });
+          }}
+          handleOk={() => setModalState({ ...modalState, continueModal: true })}
+          timeModal={1500}
+        >
+          <Heading>Your answer was submitted</Heading>
+          <Text>You can now continue your exam.</Text>
+        </Modal>
+      )}
       <Heading as={"h2"}>{title}</Heading>
       <p>{text}</p>
       {questionBody()}
       <Timer
+        setContinueModal={() =>
+          setModalState({ ...modalState, continueModal: true })
+        }
+        continueModal={modalState.continueModal}
         questionId={questionId}
         currentExam={currentExam}
         answerQuestionAction={currentAnswerAction}

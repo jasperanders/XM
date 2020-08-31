@@ -10,8 +10,9 @@ export default function Timer({
   questionId,
   currentExam,
   answerQuestionAction,
+  continueModal,
+  setContinueModal,
 }) {
-  const history = useHistory();
   const useTimer = true;
   const dispatch = useDispatch();
   const answer = useSelector(
@@ -20,6 +21,9 @@ export default function Timer({
   const question = useSelector(
     (state: TRootState) => state.questionTable.byId[questionId]
   );
+  const [timerState, setTimerState] = useState({
+    timesUp: false,
+  });
 
   const { timeStart } = answer;
   const { timeLimitMs } = question;
@@ -31,6 +35,12 @@ export default function Timer({
   );
 
   useEffect(() => {
+    if (timerState.timesUp && continueModal) {
+      dispatchTimesUpAction();
+    }
+  }, [continueModal, timerState]);
+
+  useEffect(() => {
     if (useTimer) {
       setTimeLeft(timeLimitMs / 1000);
       const interval = setInterval(() => {
@@ -40,12 +50,11 @@ export default function Timer({
         const newTimeLeft = Math.round(
           (timeLimitMs - (now - timeStart)) / 1000
         );
-        if (newTimeLeft > -1) {
+        if (newTimeLeft >= 0) {
           setTimeLeft(newTimeLeft);
         } else {
-          console.log(questionId);
-          dispatch(answerQuestionAction());
-          dispatch(nextQuestion({ currentExam }));
+          setTimerState({ ...timerState, timesUp: true });
+          setContinueModal(true);
           clearInterval(interval);
         }
       }, 1000);
@@ -62,6 +71,11 @@ export default function Timer({
     questionId,
     answerQuestionAction,
   ]);
+
+  const dispatchTimesUpAction = () => {
+    dispatch(answerQuestionAction());
+    dispatch(nextQuestion({ currentExam }));
+  };
 
   return (
     <>
