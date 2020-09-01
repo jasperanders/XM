@@ -7,7 +7,7 @@ export default function configureAppStore() {
   const store = configureStore({
     reducer: rootReducer,
     middleware: [...getDefaultMiddleware()],
-    preloadedState: hydrateState,
+    // preloadedState: hydrateState,
   });
 
   return store;

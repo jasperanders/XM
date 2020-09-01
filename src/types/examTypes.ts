@@ -46,6 +46,7 @@ export interface TExam {
   examId: string;
   name: string;
   questionsById: Array<string>;
+  dueDate: Date;
 }
 
 // =============== Tables ==================
@@ -110,6 +111,7 @@ export interface TExamState {
   currentTime: number | null;
   timerIsActive: boolean | null;
   examFinished: boolean;
+  takingExam: boolean;
 }
 
 // ============== Root State =======================

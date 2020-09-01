@@ -65,7 +65,6 @@ const UserContextProvider = ({ children }) => {
       }}
     >
       {children}
-      <button onClick={wipeUser}>Logout</button>
     </UserContext.Provider>
   );
 };

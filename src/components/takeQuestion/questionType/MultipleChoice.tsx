@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Label, Checkbox, Button } from "theme-ui";
 import { TRootState } from "../../../types/examTypes";
 import { v4 } from "uuid";
+import { useForm } from "react-hook-form";
+
 import {
   nextQuestion,
   answerMultipleChoiceQuestion,
@@ -11,12 +13,13 @@ import {
 import { multipleChoiceFormName } from "../../../constants/constants";
 
 export default function MultipleChoiceQuestion({
-  register,
-  handleSubmit,
   question,
-  getValues,
   setCurrentAnswerAction,
+  modalState,
+  setModalState,
 }) {
+  const { register, handleSubmit, reset, getValues } = useForm();
+
   /**
    * Redux hooks
    */
@@ -30,10 +33,17 @@ export default function MultipleChoiceQuestion({
   );
 
   const currentExam = useSelector((state: TRootState) => state.examTable);
+  const answerTable = useSelector((state: TRootState) => state.answerTable);
 
   const { currentExamId, currentQuestionId } = useSelector(
     (state: TRootState) => state.examState
   );
+
+  /**
+   * React Hooks
+   */
+
+  const [answerData, setAnswerData] = useState(null);
 
   /**
    * miscellaneous functions
@@ -50,19 +60,46 @@ export default function MultipleChoiceQuestion({
     return selectedAnswers;
   };
 
+  const dispatchAnswerAction = () => {
+    const selectedAnswers = makeSelectedAnswers(answerData);
+    dispatch(
+      answerMultipleChoiceQuestion({
+        questionId: question.questionId,
+        answerId: answerTable.byId[currentQuestionId].answerId,
+        selectedAnswers,
+      })
+    );
+    dispatch(
+      setAnswerEndTime({
+        questionId: question.questionId,
+        answerId: answerTable.byId[currentQuestionId].answerId,
+      })
+    );
+    dispatch(nextQuestion({ currentExam: currentExam.byId[currentExamId] }));
+  };
+
   /**
    * Effect Hooks
    */
 
   useEffect(() => {
-    console.log(questionBodyTable);
-    console.log(question);
+    if (answerData && modalState.continueModal) {
+      console.log(answerData);
+      dispatchAnswerAction();
+      setModalState({ ...modalState, showModal: false });
+    }
+  }, [answerData, modalState.continueModal]);
+
+  useEffect(() => {
+    setModalState({ ...modalState, continueModal: false });
+    setAnswerData(null);
     setCurrentAnswerAction(() => {
       return () => {
         // {nested: true} returns values as if they were submitted
         const selectedAnswers = makeSelectedAnswers(getValues({ nest: true }));
         return answerMultipleChoiceQuestion({
           questionId: question.questionId,
+          answerId: answerTable.byId[currentQuestionId].answerId,
           selectedAnswers,
         });
       };
@@ -80,15 +117,8 @@ export default function MultipleChoiceQuestion({
    * Destructuring
    */
   const onSubmit = (data) => {
-    const selectedAnswers = makeSelectedAnswers(data);
-    dispatch(
-      answerMultipleChoiceQuestion({
-        questionId: question.questionId,
-        selectedAnswers,
-      })
-    );
-    dispatch(setAnswerEndTime({ questionId: question.questionId }));
-    dispatch(nextQuestion({ currentExam: currentExam.byId[currentExamId] }));
+    setAnswerData(data);
+    setModalState({ ...modalState, showModal: true });
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -96,7 +126,6 @@ export default function MultipleChoiceQuestion({
         return (
           <div key={v4()}>
             <Label>
-              {/* <Controller as={Checkbox} name={multipleChoiceFormName} /> */}
               <Checkbox
                 defaultChecked={false}
                 name={`${multipleChoiceFormName}[${index}]`}

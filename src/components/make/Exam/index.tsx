@@ -36,11 +36,12 @@ export default function Exam() {
   };
 
   const onSubmit = (data) => {
+    console.log(data);
     const { addedUsers, addedQuestions } = newExamState;
     const questionsById = [];
     const examUsers = [];
     addedQuestions.map((el) => {
-      questionsById.push(JSON.parse(el)._id);
+      questionsById.push(JSON.parse(el).id);
     });
     addedUsers.map((el) => {
       examUsers.push(JSON.parse(el)._id);
@@ -50,6 +51,7 @@ export default function Exam() {
         name: data.examTitle,
         questionsById: questionsById,
         examUsers: examUsers,
+        dueDate: new Date(`${data.dueDate} ${data.dueTime}`),
       },
     }).catch((err) => console.error(err));
   };
@@ -141,6 +143,10 @@ export default function Exam() {
               +
             </Button>
           </Flex>
+          <label>Date of the Exam</label>
+          <input type="date" ref={register} name="dueDate" />
+          <label>Time of the Exam</label>
+          <input type="time" ref={register} name="dueTime" />
         </Flex>
         <Button
           type="button"

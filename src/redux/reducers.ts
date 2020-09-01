@@ -48,7 +48,7 @@ function answerTable(state = initialAnswerTable, { type, payload }) {
   switch (type) {
     case SET_ANSWER_TABLE:
       return produce(state, (d) => {
-        d = payload.newTable;
+        if (payload.newTable) d = payload.newTable;
         return d;
       });
     case SET_ANSWER_START_TIME:
