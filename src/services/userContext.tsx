@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 
 import HttpService, { storedAuthToken } from "./http";
 import apiRoutes from "./apiRoutes";
+import { removeLocalStorage } from "../redux/localStorage";
 
 // Initializes the Context. This constant must be imported, wherever
 // you need to access the user context
 export const UserContext = React.createContext({
-  user: { _id: null, role: null },
+  user: { _id: null, role: null, loading: false, name: null },
   loadUser: () => {},
   wipeUser: () => {},
   setUser: (newState) => {},
@@ -16,11 +17,13 @@ const UserContextProvider = ({ children }) => {
   const [user, setUser] = useState({
     _id: null,
     role: null,
+    loading: false,
+    name: null,
   });
 
   useEffect(() => {
     loadUser();
-  });
+  }, []);
 
   /**
    * the loadUser function returns a promise, because we want to wait for the state to be set, before anything else
@@ -37,7 +40,7 @@ const UserContextProvider = ({ children }) => {
       return HttpService.get(apiRoutes.USER_ME, authToken)
         .then(({ data }) => {
           console.log("User is", data);
-          setUser(data);
+          setUser({ ...data, loading: false });
         })
         .catch(() => false);
     }
@@ -45,9 +48,12 @@ const UserContextProvider = ({ children }) => {
 
   const wipeUser = () => {
     HttpService.removeAuthToken();
+    removeLocalStorage();
     setUser({
       _id: null,
       role: null,
+      loading: false,
+      name: null,
     });
   };
 

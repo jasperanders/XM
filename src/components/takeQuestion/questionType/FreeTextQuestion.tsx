@@ -39,6 +39,7 @@ export default function FreeTexTFreeTextQuestion({
     setModalState({ ...modalState, continueModal: false });
     setAnswerData(null);
     reset();
+    setCurrentWords(0);
     setCurrentAnswerAction(() => {
       return () => {
         // {nested: true} returns values as if they were submitted
@@ -105,7 +106,9 @@ export default function FreeTexTFreeTextQuestion({
           defaultValue={question.storedAnswer}
           ref={register}
           onChange={() => {
-            setCurrentWords(getValues()[freeTextFormName].split(" ").length);
+            setCurrentWords(
+              getValues()[freeTextFormName].trim().split(" ").length
+            );
           }}
         />
         <Button type="submit">Save and Next Question</Button>

@@ -8,6 +8,7 @@ import { importMDX } from "mdx.macro";
 import ExamProgress from "../components/head/ExamProgress";
 import { useSelector } from "react-redux";
 import { TRootState } from "../types/examTypes";
+import { Button } from "theme-ui";
 import Login from "./login";
 import { UserContext } from "../services/userContext";
 const ExamEnd = lazy(() => importMDX("../mdx/examEnd.mdx"));
@@ -38,7 +39,15 @@ export default function Routes() {
           </Route>
           <Route exact path="/exam/done/">
             {examFinished ? (
-              <Layout header={<ExamProgress />} mainContent={<ExamEnd />} />
+              <Layout
+                header={<ExamProgress />}
+                mainContent={
+                  <>
+                    <ExamEnd />
+                    <Button >Back to the overview.</Button>
+                  </>
+                }
+              />
             ) : (
               <Redirect to="/exam/" />
             )}

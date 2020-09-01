@@ -22,3 +22,12 @@ export const saveState = (state) => {
     console.log("Could not access local storage.");
   }
 };
+
+export const removeLocalStorage = () => {
+  try {
+    localStorage.removeItem("state");
+  } catch (err) {
+    console.log("no storage found");
+    return null;
+  }
+};
