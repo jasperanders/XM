@@ -75,10 +75,8 @@ export default function Question({ question }: TProps) {
       <p>{text}</p>
       {questionBody()}
       <Timer
-        setContinueModal={() =>
-          setModalState({ ...modalState, continueModal: true })
-        }
-        continueModal={modalState.continueModal}
+        setModalState={setModalState}
+        modalState={modalState}
         questionId={questionId}
         currentExam={currentExam}
         answerQuestionAction={currentAnswerAction}

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Container, Flex, Button } from "theme-ui";
+import { Container, Flex, Button, Card } from "theme-ui";
 
 export default function Modal({ setShowModal, handleOk, children, ...props }) {
   useEffect(() => {
@@ -29,17 +29,15 @@ export default function Modal({ setShowModal, handleOk, children, ...props }) {
           background: "rgba(0, 0, 0, 0.2)",
         }}
       />
-      <Container
+      <Card
+        variant="primary"
         sx={{
           position: "fixed",
-          top: "20%",
+          top: "40%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          border: "1px solid #888",
-          width: "80%",
-          boxShadow: "0 0 2px 2px rgba(0, 0, 0, 0.2)",
+          width: "70%",
           zIndex: "10",
-          background: "white",
           display: "flex",
           flexDirection: "column",
         }}
@@ -59,7 +57,7 @@ export default function Modal({ setShowModal, handleOk, children, ...props }) {
             {props.timeModal ? "Continue" : "Take Exam"}
           </Button>
         </Flex>
-      </Container>
+      </Card>
     </>
   );
 }

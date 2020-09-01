@@ -39,6 +39,7 @@ export default function FreeTexTFreeTextQuestion({
     setModalState({ ...modalState, continueModal: false });
     setAnswerData(null);
     reset();
+    setCurrentWords(0);
     setCurrentAnswerAction(() => {
       return () => {
         // {nested: true} returns values as if they were submitted

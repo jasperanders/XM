@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Input, Button, Heading, Text, Box } from "theme-ui";
+import { Input, Button, Heading, Text, Box, Spinner, Flex } from "theme-ui";
 import { useForm } from "react-hook-form";
 import Layout from "../components/layout/Layout";
 import HttpService from "../services/http";
@@ -7,7 +7,7 @@ import apiRoutes from "../services/apiRoutes";
 import { UserContext } from "../services/userContext";
 
 export default function Login() {
-  const { setUser } = useContext(UserContext);
+  const { loadUser, user } = useContext(UserContext);
   const { register, handleSubmit } = useForm();
   const [formError, setFormError] = useState("");
 
@@ -17,7 +17,7 @@ export default function Login() {
     HttpService.post(apiRoutes.AUTH, { email, password })
       .then(({ data }) => {
         HttpService.setAuthToken(data.token, true);
-        setUser(data);
+        loadUser();
       })
       .catch((error) => {
         setFormError(error);
@@ -41,7 +41,10 @@ export default function Login() {
             {formError && (
               <Text variant="warning">Something went wrong. Try again.</Text>
             )}
-            <Button type={"submit"}>Login</Button>
+            <Flex sx={{ alignItems: "center" }}>
+              <Button type={"submit"}>Login</Button>
+              {user.loading && <Spinner sx={{ marginLeft: "1rem" }} />}
+            </Flex>
           </form>
         </Box>
       }

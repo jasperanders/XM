@@ -78,7 +78,7 @@ export function setAnswerStartTime(payload: TUseTimerPayload) {
 
 export function setAnswerEndTime(payload: TUseTimerPayload) {
   try {
-    HttpService.put(`${apiRoutes.END_ANSWER_TIMER}${payload.answerId}`, {});
+     HttpService.put(`${apiRoutes.END_ANSWER_TIMER}${payload.answerId}`, {});
   } catch {
     console.error("Could not post, check your connection.");
   } finally {

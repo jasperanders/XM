@@ -6,12 +6,14 @@ import { Heading } from "theme-ui";
 import { TRootState } from "../../types/examTypes";
 import { nextQuestion } from "../../redux/actions";
 
+let interval;
+
 export default function Timer({
   questionId,
   currentExam,
   answerQuestionAction,
-  continueModal,
-  setContinueModal,
+  modalState,
+  setModalState,
 }) {
   const useTimer = true;
   const dispatch = useDispatch();
@@ -35,15 +37,22 @@ export default function Timer({
   );
 
   useEffect(() => {
-    if (timerState.timesUp && continueModal) {
+    if (timerState.timesUp && modalState.continueModal) {
       dispatchTimesUpAction();
+      setModalState({ ...modalState, showModal: false });
     }
-  }, [continueModal, timerState]);
+  }, [modalState.continueModal, timerState]);
+
+  useEffect(() => {
+    if (modalState.showModal) {
+      clearInterval(interval);
+    }
+  }, [modalState.showModal]);
 
   useEffect(() => {
     if (useTimer) {
       setTimeLeft(timeLimitMs / 1000);
-      const interval = setInterval(() => {
+      interval = setInterval(() => {
         const now = Date.now();
         const timeStart = store.getState().answerTable.byId[questionId]
           .timeStart;
@@ -54,7 +63,7 @@ export default function Timer({
           setTimeLeft(newTimeLeft);
         } else {
           setTimerState({ ...timerState, timesUp: true });
-          setContinueModal(true);
+          setModalState({ ...modalState, showModal: true });
           clearInterval(interval);
         }
       }, 1000);
