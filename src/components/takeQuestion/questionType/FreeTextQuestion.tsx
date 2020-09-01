@@ -106,7 +106,9 @@ export default function FreeTexTFreeTextQuestion({
           defaultValue={question.storedAnswer}
           ref={register}
           onChange={() => {
-            setCurrentWords(getValues()[freeTextFormName].split(" ").length);
+            setCurrentWords(
+              getValues()[freeTextFormName].trim().split(" ").length
+            );
           }}
         />
         <Button type="submit">Save and Next Question</Button>

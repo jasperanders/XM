@@ -68,7 +68,9 @@ export default function Question({ question }: TProps) {
           timeModal={1500}
         >
           <Heading>Your answer was submitted</Heading>
-          <Text>You can now continue your exam.</Text>
+          <Text sx={{ marginTop: "1rem" }}>
+            Please click "Continue" to answer the next question.
+          </Text>
         </Modal>
       )}
       <Heading as={"h2"}>{title}</Heading>

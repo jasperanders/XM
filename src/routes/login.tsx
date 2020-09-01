@@ -7,12 +7,12 @@ import apiRoutes from "../services/apiRoutes";
 import { UserContext } from "../services/userContext";
 
 export default function Login() {
-  const { loadUser, user } = useContext(UserContext);
+  const { loadUser, user, setUser } = useContext(UserContext);
   const { register, handleSubmit } = useForm();
   const [formError, setFormError] = useState("");
 
   const onSubmit = (data) => {
-    console.log(data);
+    setUser({ ...user, loading: true });
     const { email, password } = data;
     HttpService.post(apiRoutes.AUTH, { email, password })
       .then(({ data }) => {

@@ -50,21 +50,25 @@ export default function SelectExam() {
           handleOk={() => setExam(selectedExam)}
           setShowModal={setShowModal}
         >
-          <Flex sx={{ flexDirection: "colum" }}>
+          <Flex sx={{ flexDirection: "column" }}>
             <Heading>
               {`You are about to take the exam: ${examTable?.byId[selectedExam]?.name}`}
             </Heading>
-            <Text>
+            <Text sx={{ marginTop: "1rem" }}>
               Please read the following carefully and make sure you understand
               everything. Also make sure the your data provided below is
               correct. If you run into trouble please immediately contact your
               exam supervisor.
             </Text>
 
-            <Text>Your name: {user.name}</Text>
-            <Text>Your identification code: {user._id}</Text>
-
+            <Text sx={{ marginTop: "1rem" }}>
+              Your name: <b>{user.name}</b>
+            </Text>
             <Text>
+              Your identification code: <b>{user._id}</b>
+            </Text>
+
+            <Text sx={{ marginTop: "1rem" }}>
               This exam is an partial open book exam. You can access any
               material you like. You still have to take the exam on your own.
               Further, instead of an an overall time limit, this exam utilizes
@@ -74,24 +78,32 @@ export default function SelectExam() {
               the time frame for a question is up.
             </Text>
 
-            <Text>
-              You will encounter either free text questions or multiple choice
-              questions. Make sure you do not exceed the word limit. A live word
-              counter is found above your answer.
+            <Text sx={{ marginTop: "1rem" }}>
+              You will encounter either free-text questions or multiple choice
+              questions. For free-text questions, make sure you do not exceed
+              the word limit. A live word counter is found above your answer.
+              For the multiple choice questions, any amount of correct answers
+              is possible (even none).
             </Text>
 
-            <Text>
+            <Text sx={{ marginTop: "1rem" }}>
               To ensure that your exam will run smoothly, ensure your device is
               plugged into power and connected to the internet. We do not advise
-              you to start the exam if your device is heavily outdated or you
-              experience frequent crashes. It lays in your responsibility to
-              ensure your device is working properly.
+              you to start the exam if your device is heavily outdated or if you
+              experience frequent device crashes. It lays in your responsibility
+              to ensure your device is working properly.
             </Text>
 
-            <Text>
+            <Text sx={{ marginTop: "1rem" }}>
               By continuing to the exam you verify that you are taking the exam
               on your own without any help. If you understand the above and want
               to take the exam, please select "Continue".
+            </Text>
+            <Text sx={{ marginTop: "1rem" }}>
+              <b>
+                Before continuing, make sure you are ready. The exam will
+                immediately start.
+              </b>
             </Text>
           </Flex>
         </Modal>
